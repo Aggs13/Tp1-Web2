@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import Web2.Tp1.dto.ProductoDataDto;
+import Web2.Tp1.dto.ProductoRespuestaDto;
+import Web2.Tp1.dto.RespuestasDto;
 import Web2.Tp1.service.ProductoService;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,12 +22,12 @@ public class ProductoController {
  } 
 
   @GetMapping("/ObtenerProductos")
-  public List<ProductoDataDto> ObtenerProductos(){
+  public RespuestasDto<List<ProductoRespuestaDto>> ObtenerProductos(){
     return _productoService.GetProductosService();
   }
 
   @GetMapping("/ObtenerPorId")
-  public ProductoDataDto ObtenerPorId(@RequestParam int id) {
+  public RespuestasDto<ProductoRespuestaDto> ObtenerPorId(@RequestParam int id) {
     return _productoService.GetProductoService(id);
   }
   

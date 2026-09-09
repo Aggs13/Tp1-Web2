@@ -7,11 +7,10 @@ import lombok.Setter;
 
 @Getter 
 @Setter 
-public class ProductResponseDto {
 
-  private List<ProductoDataDto> products;
-  private int total;
-  private int skip;
-  private int limit;
+// Clase para usar los productos de DummyJSON
+public class ListProductDto {
+
+  private List<ProductoRespuestaDto> products;
 
 }
