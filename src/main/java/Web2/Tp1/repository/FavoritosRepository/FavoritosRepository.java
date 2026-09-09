@@ -11,7 +11,7 @@ import Web2.Tp1.model.Favorito;
 public interface FavoritosRepository {
   public List<ProductoRespuestaDto> GetProductosFavoritosRepository();
   public boolean PostProductoFavorito(FavoritosEntradaDto favorito);
-   List<Favorito> GetListFavoritosRepository();
+  public List<Favorito> GetListFavoritosRepository();
 
   
 } 

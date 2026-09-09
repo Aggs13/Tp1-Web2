@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import Web2.Tp1.dto.FavoritosEntradaDto;
 import Web2.Tp1.dto.FavoritosSalidaDto;
 import Web2.Tp1.dto.ProductoRespuestaDto;
 import Web2.Tp1.model.Favorito;
@@ -39,6 +40,14 @@ public class FavoritosService {
 
     return salidaFav;
 
+  }
+
+  public String postFavoritoService(FavoritosEntradaDto fav){
+    boolean agregado = _favoritosRepository.PostProductoFavorito(fav);
+    
+    if(!agregado) return "No se pudo agregar el producto";
+    return "Se agrego el producto a favoritos";
+    
   }
 
 }

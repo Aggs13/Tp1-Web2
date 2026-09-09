@@ -36,12 +36,20 @@ public class FavoritosRepositoryImplement implements FavoritosRepository{
 
   @Override
   public boolean PostProductoFavorito(FavoritosEntradaDto favorito) {
-    
+    RestClient restClient = RestClient.create();
+    ProductoRespuestaDto product = restClient.get().uri("https://dummyjson.com/products").retrieve().body(ListProductDto.class)
+    .getProducts()
+    .stream()
+    .filter(p -> p.getId() == favorito.getIdProducto())
+    .findFirst()
+    .orElse(null);
+
+    if(product == null) return false;
 
     Favorito newFav = new Favorito
     (
-      312, 
-      favorito.getId(),
+      listaFavoritos.getLast().getId() + 1, 
+      favorito.getIdProducto(),
       favorito.getNotaPersonal(), 
       favorito.getFechaAgregado()
     );
