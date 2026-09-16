@@ -43,11 +43,8 @@ public class FavoritosRepositoryImplement implements FavoritosRepository{
   }
 
   @Override
-  public ProductoRespuestaDto EliminarFavorito(int idProducto) {
-    listaFavoritos = listaFavoritos.stream().filter(p -> p.getIdProducto() != idProducto).toList();
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'EliminarFavorito'");
-    
+  public void EliminarFavorito(int idProducto) {
+    listaFavoritos.removeIf(p -> p.getIdProducto() == idProducto);
   }
 
   @Override
@@ -57,7 +54,7 @@ public class FavoritosRepositoryImplement implements FavoritosRepository{
   }
 
   @Override
-  public ProductoRespuestaDto ActualizarFavorito(int idProducto) {
+  public void ActualizarFavorito(int idProducto) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'ActualizarFavorito'");
   }

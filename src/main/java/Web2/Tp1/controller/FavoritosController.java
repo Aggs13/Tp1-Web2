@@ -6,10 +6,12 @@ import Web2.Tp1.dto.FavoritosEntradaDto;
 import Web2.Tp1.dto.FavoritosSalidaDto;
 import Web2.Tp1.dto.RespuestasDto;
 import Web2.Tp1.service.FavoritosService.FavoritosService;
+import ch.qos.logback.core.joran.action.Action;
 
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,16 +27,18 @@ public class FavoritosController {
   }
 
   @GetMapping()
-  public RespuestasDto<List<FavoritosSalidaDto>> GetFavoritos(){
-    List<FavoritosSalidaDto> list = _favoritosService.getFavoritosService();
-    return  RespuestasDto.Respuesta("Mostrando productos favoritos", list, 200);
+  public ResponseEntity<RespuestasDto<List<FavoritosSalidaDto>>> GetFavoritos(){
+
+    RespuestasDto<List<FavoritosSalidaDto>> respuesta = _favoritosService.getFavoritosService();
+    return  ResponseEntity.status(respuesta.getEstado()).body(respuesta);
+
   }
 
   @PostMapping()
-  public RespuestasDto<String> postFavorito(@RequestBody FavoritosEntradaDto fav) {
+  public ResponseEntity<RespuestasDto<FavoritosSalidaDto>> postFavorito(@RequestBody FavoritosEntradaDto fav) {
       
-    String mensaje = _favoritosService.postFavoritoService(fav);
-    return RespuestasDto.Respuesta(mensaje, null, 201);
+    RespuestasDto<FavoritosSalidaDto> respuesta = _favoritosService.postFavoritoService(fav);
+    return ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
   
 

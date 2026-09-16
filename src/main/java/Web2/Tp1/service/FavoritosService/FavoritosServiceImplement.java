@@ -4,16 +4,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import Web2.Tp1.client.DummyJsonProducto;
-import Web2.Tp1.client.DummyJsonProductosResponse;
 import Web2.Tp1.dto.FavoritosEntradaDto;
 import Web2.Tp1.dto.FavoritosSalidaDto;
 import Web2.Tp1.dto.ProductoRespuestaDto;
+import Web2.Tp1.dto.RespuestasDto;
 import Web2.Tp1.model.Favorito;
 import Web2.Tp1.repository.FavoritosRepository.FavoritosRepository;
 import Web2.Tp1.repository.ProductoRepository.ProductoRespository;
-import Web2.Tp1.service.ProductosService.ProductoService;
 
 @Service 
 public class FavoritosServiceImplement implements FavoritosService{
@@ -26,12 +26,15 @@ public class FavoritosServiceImplement implements FavoritosService{
     this._productoRespository = p;
   }
 
+
+
+  // Obtiene la lista de favoritos 
   @Override 
-  public List<FavoritosSalidaDto> getFavoritosService(){
+  public RespuestasDto<List<FavoritosSalidaDto>> getFavoritosService(){
 
     List<Favorito> fav = _favoritosRepository.GetListFavoritosRepository();
     List<DummyJsonProducto> productos = _favoritosRepository.GetProductosFavoritosRepository();
-    
+
     List<FavoritosSalidaDto> salidaFav = fav.stream().map(f -> { // Para cada favorito se ejecuta este bloque de codigo rodeado por {}
 
       // Se filtran los productos para obtener uno por id
@@ -52,35 +55,49 @@ public class FavoritosServiceImplement implements FavoritosService{
       );
     }).toList();
 
-    return salidaFav;
+    return RespuestasDto.Respuesta("Mostrando productos favoritos",salidaFav, 200);
 
   }
 
+  // Agregar un nuevo producto a favoritos
   @Override 
-  public String postFavoritoService(FavoritosEntradaDto favorito){
+  public RespuestasDto<FavoritosSalidaDto> postFavoritoService(FavoritosEntradaDto favorito){
     DummyJsonProducto producto;
 
     // busca el producto por el repository
     try {
       producto = _productoRespository.GetProductoRespository(favorito.getIdProducto());
-    } catch (Exception e) {
-      return "No se pudo agregar el producto ERROR: " + e.getMessage();
+    } catch (HttpClientErrorException e) {
+      
+      return RespuestasDto.Respuesta("No es encontro el producto", null, 404);
+
+    }catch(Exception e){
+
+      return RespuestasDto.Respuesta("No se pudo agregar el producto ERROR: " + e.getMessage(), null, 500);
     }
 
-    if(producto == null) return  "El producto no existe";
 
     // revisa que el producto no este ya en la lista favoritos
     boolean existe = _favoritosRepository.GetListFavoritosRepository().stream().anyMatch(f -> f.getIdProducto() == favorito.getIdProducto());
-    if(existe) return  "El producto ya esta en favoritos";
+    if(existe) return RespuestasDto.Respuesta("El producto ya esta en favoritos", null, 409);
 
     // genera el id a partir del ultimo agregado
     int idFav = _favoritosRepository.GetListFavoritosRepository().stream().mapToInt(f -> f.getId()).max().orElse(0 ) + 1;
 
-    // se crea el objeto Favorito y se le pasa 
+    // se crea el objeto Favorito y se le pasa al repository
     Favorito fav = new Favorito(idFav, producto.id().intValue(), favorito.getNotaPersonal(), LocalDate.now());
     _favoritosRepository.PostProductoFavorito(fav);
     
-    return "Se agrego el producto correctamente";
+
+    // Mapeo producto agregado a favoritos para mostrar en el body
+    ProductoRespuestaDto productoRespuestaDto = new ProductoRespuestaDto(producto.id().intValue(),producto.title(),producto.price());
+    FavoritosSalidaDto favoritosSalidaDto = new FavoritosSalidaDto(
+      fav.getNotaPersonal(),
+      fav.getFechaAgregado(),
+      productoRespuestaDto
+
+    );
+    return RespuestasDto.Respuesta("Se agrego el producto correctamente",favoritosSalidaDto, 200);
 
     
   }
