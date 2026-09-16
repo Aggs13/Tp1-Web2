@@ -4,14 +4,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Web2.Tp1.dto.FavoritosEntradaDto;
 import Web2.Tp1.dto.FavoritosSalidaDto;
+import Web2.Tp1.dto.ProductoRespuestaDto;
 import Web2.Tp1.dto.RespuestasDto;
 import Web2.Tp1.service.FavoritosService.FavoritosService;
-import ch.qos.logback.core.joran.action.Action;
 
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +40,12 @@ public class FavoritosController {
       
     RespuestasDto<FavoritosSalidaDto> respuesta = _favoritosService.postFavoritoService(fav);
     return ResponseEntity.status(respuesta.getEstado()).body(respuesta);
+  }
+
+  @DeleteMapping 
+  public ResponseEntity<RespuestasDto<ProductoRespuestaDto>> deleteFavorito(int id){
+    RespuestasDto<ProductoRespuestaDto> respuesta = _favoritosService.eliminarFavoritoService(id);
+    return  ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
   
 

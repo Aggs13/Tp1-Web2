@@ -102,4 +102,28 @@ public class FavoritosServiceImplement implements FavoritosService{
     
   }
 
+
+  @Override
+  public RespuestasDto<ProductoRespuestaDto> eliminarFavoritoService(int idProducto) {
+    try {
+      DummyJsonProducto dummyJsonProducto = _productoRespository.GetProductoRespository(idProducto);
+      _favoritosRepository.EliminarFavorito(idProducto);
+
+      ProductoRespuestaDto producto = new ProductoRespuestaDto(
+        dummyJsonProducto.id().intValue(),
+        dummyJsonProducto.title(),
+        dummyJsonProducto.price()
+      );
+
+      return  RespuestasDto.Respuesta("Se elimino el producto: " + producto.getTitle()+ "De favoritos",producto , 200);
+
+    } catch (HttpClientErrorException e) {
+
+      return  RespuestasDto.Respuesta("No se encotro el producto a eliminar",null , 404);
+      
+    }catch(Exception e){
+      return  RespuestasDto.Respuesta("Error al intentar eliminar: " + e.getMessage(),null , 500);
+    }
+  }
+
 }
