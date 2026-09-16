@@ -7,9 +7,9 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestClient;
 
+import Web2.Tp1.client.DummyJsonProducto;
+import Web2.Tp1.client.DummyJsonProductosResponse;
 import Web2.Tp1.dto.FavoritosEntradaDto;
-import Web2.Tp1.dto.ListProductDto;
-import Web2.Tp1.dto.ProductoRespuestaDto;
 import Web2.Tp1.model.Favorito;
 
 @Repository 
@@ -25,22 +25,23 @@ public class FavoritosRepositoryImplement implements FavoritosRepository{
     }
 
   @Override
-  public List<ProductoRespuestaDto> GetProductosFavoritosRepository() {
+  public List<DummyJsonProducto> GetProductosFavoritosRepository() {
     RestClient restClient = RestClient.create();
-		List<ProductoRespuestaDto> product = restClient.get().uri("https://dummyjson.com/products").retrieve().body(ListProductDto.class)
-    .getProducts()
-    .stream()
-    .filter(p -> listaFavoritos.stream().anyMatch(f -> f.getIdProducto() == p.getId())).toList();
-    return  product;
+		DummyJsonProductosResponse response = restClient.get().uri("https://dummyjson.com/products").retrieve().body(DummyJsonProductosResponse.class);
+  
+    return response.products().stream()
+      .filter(p -> listaFavoritos.stream().anyMatch(f -> f.getIdProducto() == p.id()))
+      .toList();
+
   }
+
 
   @Override
   public boolean PostProductoFavorito(FavoritosEntradaDto favorito) {
     RestClient restClient = RestClient.create();
-    ProductoRespuestaDto product = restClient.get().uri("https://dummyjson.com/products").retrieve().body(ListProductDto.class)
-    .getProducts()
-    .stream()
-    .filter(p -> p.getId() == favorito.getIdProducto())
+    DummyJsonProductosResponse response = restClient.get().uri("https://dummyjson.com/products").retrieve().body(DummyJsonProductosResponse.class);
+
+    DummyJsonProducto product = response.products().stream().filter(p -> p.id() == favorito.getIdProducto())
     .findFirst()
     .orElse(null);
 

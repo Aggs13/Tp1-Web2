@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import Web2.Tp1.dto.FavoritosEntradaDto;
 import Web2.Tp1.dto.FavoritosSalidaDto;
 import Web2.Tp1.dto.RespuestasDto;
-import Web2.Tp1.service.FavoritosService;
+import Web2.Tp1.service.FavoritosService.FavoritosService;
 
 import java.util.List;
 
@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-
 
 
 @RestController 

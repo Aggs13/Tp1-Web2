@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Web2.Tp1.dto.ProductoRespuestaDto;
 import Web2.Tp1.dto.RespuestasDto;
-import Web2.Tp1.service.ProductoService;
+import Web2.Tp1.service.ProductosService.ProductoService;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 

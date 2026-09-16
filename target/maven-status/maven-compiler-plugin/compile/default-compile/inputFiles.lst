@@ -1,0 +1,17 @@
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\client\DummyJsonProducto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\client\DummyJsonProductosResponse.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\controller\FavoritosController.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\controller\ProductoController.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\FavoritosEntradaDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\FavoritosSalidaDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\ProductoRespuestaDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\RespuestasDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\model\Favorito.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\model\Producto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\repository\FavoritosRepository\FavoritosRepository.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\repository\FavoritosRepository\FavoritosRepositoryImplement.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\repository\ProductoRepository\ProductoRespository.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\repository\ProductoRepository\ProductoRespositoryImplement.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\service\FavoritosService.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\service\ProductoService.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\Tp1Application.java
