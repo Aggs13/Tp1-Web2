@@ -13,6 +13,7 @@ public class Favorito {
   private int idProducto;
   private int notaPersonal;
   private LocalDate fechaAgregado;
+  
 
   public  Favorito (int id,int idProducto, int notaPersonal,LocalDate fechaAgregado){
     this.id = id;

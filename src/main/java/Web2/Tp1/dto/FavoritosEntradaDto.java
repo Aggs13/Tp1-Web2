@@ -9,14 +9,12 @@ import lombok.Setter;
 @Setter 
 public class FavoritosEntradaDto {
 
-  private int id;
   private int idProducto;
   private int notaPersonal;
   private LocalDate fechaAgregado;
 
-  public FavoritosEntradaDto(int id, int idProducto, int notaPersonal, LocalDate fechaAgregado){
+  public FavoritosEntradaDto(int idProducto, int notaPersonal, LocalDate fechaAgregado){
 
-    this.id = id;
     this.idProducto = idProducto; 
     this.notaPersonal = notaPersonal;
     this.fechaAgregado = fechaAgregado;

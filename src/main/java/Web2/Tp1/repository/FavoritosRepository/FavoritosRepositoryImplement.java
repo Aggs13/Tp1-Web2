@@ -9,13 +9,14 @@ import org.springframework.web.client.RestClient;
 
 import Web2.Tp1.client.DummyJsonProducto;
 import Web2.Tp1.client.DummyJsonProductosResponse;
-import Web2.Tp1.dto.FavoritosEntradaDto;
+import Web2.Tp1.dto.ProductoRespuestaDto;
 import Web2.Tp1.model.Favorito;
 
 @Repository 
 public class FavoritosRepositoryImplement implements FavoritosRepository{
 
   private List<Favorito> listaFavoritos = new ArrayList<>();
+  private RestClient restClient = RestClient.create();
 
     public FavoritosRepositoryImplement() {
       listaFavoritos.add(new Favorito(1,1 ,4,LocalDate.now()));
@@ -26,7 +27,6 @@ public class FavoritosRepositoryImplement implements FavoritosRepository{
 
   @Override
   public List<DummyJsonProducto> GetProductosFavoritosRepository() {
-    RestClient restClient = RestClient.create();
 		DummyJsonProductosResponse response = restClient.get().uri("https://dummyjson.com/products").retrieve().body(DummyJsonProductosResponse.class);
   
     return response.products().stream()
@@ -37,33 +37,35 @@ public class FavoritosRepositoryImplement implements FavoritosRepository{
 
 
   @Override
-  public boolean PostProductoFavorito(FavoritosEntradaDto favorito) {
-    RestClient restClient = RestClient.create();
-    DummyJsonProductosResponse response = restClient.get().uri("https://dummyjson.com/products").retrieve().body(DummyJsonProductosResponse.class);
-
-    DummyJsonProducto product = response.products().stream().filter(p -> p.id() == favorito.getIdProducto())
-    .findFirst()
-    .orElse(null);
-
-    if(product == null) return false;
-
-    Favorito newFav = new Favorito
-    (
-      listaFavoritos.getLast().getId() + 1, 
-      favorito.getIdProducto(),
-      favorito.getNotaPersonal(), 
-      favorito.getFechaAgregado()
-    );
-
-    listaFavoritos.add(newFav);
-    return true;
+  public void PostProductoFavorito(Favorito favorito) {
+    listaFavoritos.add(favorito);
     
   }
+
+  @Override
+  public ProductoRespuestaDto EliminarFavorito(int idProducto) {
+    listaFavoritos = listaFavoritos.stream().filter(p -> p.getIdProducto() != idProducto).toList();
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'EliminarFavorito'");
+    
+  }
+
+  @Override
+  public ProductoRespuestaDto ObtenerUnFavorito(int idProducto) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'ObtenerUnFavorito'");
+  }
+
+  @Override
+  public ProductoRespuestaDto ActualizarFavorito(int idProducto) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'ActualizarFavorito'");
+  }
+  
 
   // Nesesario para el service
   @Override 
   public List<Favorito> GetListFavoritosRepository() {
     return listaFavoritos;
-}
-  
+  }
 }

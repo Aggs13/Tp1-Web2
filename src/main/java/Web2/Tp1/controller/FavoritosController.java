@@ -24,17 +24,17 @@ public class FavoritosController {
     this._favoritosService = f;
   }
 
-  @GetMapping("Get/")
+  @GetMapping()
   public RespuestasDto<List<FavoritosSalidaDto>> GetFavoritos(){
     List<FavoritosSalidaDto> list = _favoritosService.getFavoritosService();
     return  RespuestasDto.Respuesta("Mostrando productos favoritos", list, 200);
   }
 
-  @PostMapping("Post/")
-  public RespuestasDto<String> postMethodName(@RequestBody FavoritosEntradaDto fav) {
+  @PostMapping()
+  public RespuestasDto<String> postFavorito(@RequestBody FavoritosEntradaDto fav) {
       
     String mensaje = _favoritosService.postFavoritoService(fav);
-    return RespuestasDto.Respuesta(mensaje, null, 200);
+    return RespuestasDto.Respuesta(mensaje, null, 201);
   }
   
 
