@@ -9,6 +9,7 @@ import org.springframework.web.client.RestClient;
 
 import Web2.Tp1.client.DummyJsonProducto;
 import Web2.Tp1.client.DummyJsonProductosResponse;
+import Web2.Tp1.dto.FavoritosSalidaDto;
 import Web2.Tp1.dto.ProductoRespuestaDto;
 import Web2.Tp1.model.Favorito;
 
@@ -48,9 +49,23 @@ public class FavoritosRepositoryImplement implements FavoritosRepository{
   }
 
   @Override
-  public ProductoRespuestaDto ObtenerUnFavorito(int idProducto) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'ObtenerUnFavorito'");
+  public FavoritosSalidaDto ObtenerUnFavorito(ProductoRespuestaDto producto) {
+
+
+    FavoritosSalidaDto fav = listaFavoritos.stream()
+
+      .filter(f -> f.getIdProducto() == producto.getId())
+      .map(f -> new FavoritosSalidaDto(
+        f.getNotaPersonal(),
+        f.getFechaAgregado(),
+        producto
+        
+
+    ))
+    .findFirst()
+    .orElse(null);
+
+    return fav;
   }
 
   @Override
