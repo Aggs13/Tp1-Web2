@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController 
@@ -41,6 +43,13 @@ public class FavoritosController {
     RespuestasDto<FavoritosSalidaDto> respuesta = _favoritosService.postFavoritoService(fav);
     return ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
+
+  @GetMapping("{id}")
+  public ResponseEntity<RespuestasDto<FavoritosSalidaDto>> getMethodName(@RequestParam int id) {
+    RespuestasDto<FavoritosSalidaDto> respuesta = _favoritosService.obtenerUnicoFavorito(id);
+    return  ResponseEntity.status(respuesta.getEstado()).body(respuesta);
+  }
+  
 
   @DeleteMapping 
   public ResponseEntity<RespuestasDto<ProductoRespuestaDto>> deleteFavorito(int id){

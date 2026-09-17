@@ -9,8 +9,6 @@ import org.springframework.web.client.RestClient;
 
 import Web2.Tp1.client.DummyJsonProducto;
 import Web2.Tp1.client.DummyJsonProductosResponse;
-import Web2.Tp1.dto.FavoritosSalidaDto;
-import Web2.Tp1.dto.ProductoRespuestaDto;
 import Web2.Tp1.model.Favorito;
 
 @Repository 
@@ -48,25 +46,6 @@ public class FavoritosRepositoryImplement implements FavoritosRepository{
     listaFavoritos.removeIf(p -> p.getIdProducto() == idProducto);
   }
 
-  @Override
-  public FavoritosSalidaDto ObtenerUnFavorito(ProductoRespuestaDto producto) {
-
-
-    FavoritosSalidaDto fav = listaFavoritos.stream()
-
-      .filter(f -> f.getIdProducto() == producto.getId())
-      .map(f -> new FavoritosSalidaDto(
-        f.getNotaPersonal(),
-        f.getFechaAgregado(),
-        producto
-        
-
-    ))
-    .findFirst()
-    .orElse(null);
-
-    return fav;
-  }
 
   @Override
   public void ActualizarFavorito(int idProducto) {

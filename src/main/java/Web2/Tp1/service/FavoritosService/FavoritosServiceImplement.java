@@ -126,4 +126,41 @@ public class FavoritosServiceImplement implements FavoritosService{
     }
   }
 
+
+
+  @Override
+  public RespuestasDto<FavoritosSalidaDto> obtenerUnicoFavorito(int idProducto) {
+    try {
+      
+      DummyJsonProducto dummyJsonProducto = _productoRespository.GetProductoRespository(idProducto);
+      ProductoRespuestaDto producto = new ProductoRespuestaDto(
+  
+        dummyJsonProducto.id().intValue(),
+        dummyJsonProducto.title(),
+        dummyJsonProducto.price()
+      );
+  
+      FavoritosSalidaDto fav = _favoritosRepository.GetListFavoritosRepository()
+      .stream()
+      .filter(f -> f.getIdProducto() == producto.getId())
+      .map(f -> new FavoritosSalidaDto(
+        f.getNotaPersonal(),
+        f.getFechaAgregado(),
+        producto
+      ))
+      .findFirst()
+      .orElse(null);
+
+      if(fav == null) return RespuestasDto.Respuesta("No se encontro el producto favorito", null, 404);
+      return RespuestasDto.Respuesta("Unico producto favorito", fav, 200);
+
+    } catch (HttpClientErrorException e) {
+
+      return RespuestasDto.Respuesta("Error al buscar favorito", null, e.getStatusCode().value());
+      
+    }catch(Exception e){
+      return RespuestasDto.Respuesta("Interno en el servidor", null, 500);
+    }
+  }
+
 }
