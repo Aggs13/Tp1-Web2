@@ -1,6 +1,7 @@
 package Web2.Tp1.service.ProductosService;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import Web2.Tp1.client.DummyJsonProducto;
 import Web2.Tp1.dto.ProductoRespuestaDto;
@@ -47,12 +48,18 @@ public class ProductoServiceImplement implements ProductoService{
         200
       );
 
-    } catch (Exception e) {
+    } catch (HttpClientErrorException e) {
 
       return RespuestasDto.Respuesta(
         "No se encontró el producto ingresado",
         null,
-        404
+        e.getStatusCode().value()
+      );
+    }catch(Exception e){
+      return RespuestasDto.Respuesta(
+        "Error interno",
+        null,
+        500
       );
     }
     

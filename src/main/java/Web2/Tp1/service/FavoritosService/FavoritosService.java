@@ -10,6 +10,6 @@ import Web2.Tp1.dto.RespuestasDto;
 public interface FavoritosService {
   RespuestasDto<List<FavoritosSalidaDto>> getFavoritosService();
   RespuestasDto<FavoritosSalidaDto> postFavoritoService(FavoritosEntradaDto fav);
-  RespuestasDto<ProductoRespuestaDto> eliminarFavoritoService(int idProducto);
-  RespuestasDto<FavoritosSalidaDto> obtenerUnicoFavorito(int idProducto);
+  RespuestasDto<ProductoRespuestaDto> eliminarFavoritoService(int idFav);
+  RespuestasDto<FavoritosSalidaDto> obtenerUnicoFavorito(int idFav);
 }

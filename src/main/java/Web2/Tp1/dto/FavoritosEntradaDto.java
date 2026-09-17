@@ -1,23 +1,26 @@
 package Web2.Tp1.dto;
 
-import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter 
 @Setter 
 public class FavoritosEntradaDto {
-
+  @PositiveOrZero 
+  
   private int idProducto;
-  private int notaPersonal;
-  private LocalDate fechaAgregado;
 
-  public FavoritosEntradaDto(int idProducto, int notaPersonal, LocalDate fechaAgregado){
+  @NotBlank 
+  private String notaPersonal;
+
+  public FavoritosEntradaDto(int idProducto, String notaPersonal){
 
     this.idProducto = idProducto; 
     this.notaPersonal = notaPersonal;
-    this.fechaAgregado = fechaAgregado;
+
   }
 
 }

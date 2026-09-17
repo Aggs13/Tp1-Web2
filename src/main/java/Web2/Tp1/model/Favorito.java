@@ -11,11 +11,11 @@ public class Favorito {
   
   private int id;
   private int idProducto;
-  private int notaPersonal;
+  private String notaPersonal;
   private LocalDate fechaAgregado;
   
 
-  public  Favorito (int id,int idProducto, int notaPersonal,LocalDate fechaAgregado){
+  public  Favorito (int id,int idProducto, String notaPersonal,LocalDate fechaAgregado){
     this.id = id;
     this.idProducto = idProducto;
     this.notaPersonal = notaPersonal;

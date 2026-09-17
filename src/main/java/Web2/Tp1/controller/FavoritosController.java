@@ -7,6 +7,7 @@ import Web2.Tp1.dto.FavoritosSalidaDto;
 import Web2.Tp1.dto.ProductoRespuestaDto;
 import Web2.Tp1.dto.RespuestasDto;
 import Web2.Tp1.service.FavoritosService.FavoritosService;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -38,22 +39,22 @@ public class FavoritosController {
   }
 
   @PostMapping()
-  public ResponseEntity<RespuestasDto<FavoritosSalidaDto>> postFavorito(@RequestBody FavoritosEntradaDto fav) {
+  public ResponseEntity<RespuestasDto<FavoritosSalidaDto>> postFavorito(@Valid @RequestBody FavoritosEntradaDto fav) {
       
     RespuestasDto<FavoritosSalidaDto> respuesta = _favoritosService.postFavoritoService(fav);
     return ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
 
-  @GetMapping("{id}")
-  public ResponseEntity<RespuestasDto<FavoritosSalidaDto>> getMethodName(@RequestParam int id) {
+  @GetMapping("/{id}")
+  public ResponseEntity<RespuestasDto<FavoritosSalidaDto>> GetUnicoFavorito(@PathVariable int id) {
     RespuestasDto<FavoritosSalidaDto> respuesta = _favoritosService.obtenerUnicoFavorito(id);
     return  ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
   
 
-  @DeleteMapping 
-  public ResponseEntity<RespuestasDto<ProductoRespuestaDto>> deleteFavorito(int id){
-    RespuestasDto<ProductoRespuestaDto> respuesta = _favoritosService.eliminarFavoritoService(id);
+  @DeleteMapping("{id}")
+  public ResponseEntity<RespuestasDto<ProductoRespuestaDto>> deleteFavorito(@PathVariable int id){
+    RespuestasDto<ProductoRespuestaDto> respuesta = _favoritosService.eliminarFavoritoService(id); // <- Devuelve body para mostrar el producto que se elimino de favoritos
     return  ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
   

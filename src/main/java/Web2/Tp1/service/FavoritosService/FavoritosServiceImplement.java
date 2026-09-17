@@ -49,6 +49,7 @@ public class FavoritosServiceImplement implements FavoritosService{
         .orElse(null);
       // se retorna el objeto con su producto y atrubutos
       return new FavoritosSalidaDto(
+        f.getId(),
         f.getNotaPersonal(),
         f.getFechaAgregado(),
         producto
@@ -92,22 +93,26 @@ public class FavoritosServiceImplement implements FavoritosService{
     // Mapeo producto agregado a favoritos para mostrar en el body
     ProductoRespuestaDto productoRespuestaDto = new ProductoRespuestaDto(producto.id().intValue(),producto.title(),producto.price());
     FavoritosSalidaDto favoritosSalidaDto = new FavoritosSalidaDto(
+      fav.getId(),
       fav.getNotaPersonal(),
       fav.getFechaAgregado(),
       productoRespuestaDto
 
     );
-    return RespuestasDto.Respuesta("Se agrego el producto correctamente",favoritosSalidaDto, 200);
+    return RespuestasDto.Respuesta("Se agrego el producto correctamente",favoritosSalidaDto, 201);
 
     
   }
 
 
   @Override
-  public RespuestasDto<ProductoRespuestaDto> eliminarFavoritoService(int idProducto) {
+  public RespuestasDto<ProductoRespuestaDto> eliminarFavoritoService(int idFav) {
     try {
-      DummyJsonProducto dummyJsonProducto = _productoRespository.GetProductoRespository(idProducto);
-      _favoritosRepository.EliminarFavorito(idProducto);
+      Favorito fav = _favoritosRepository.GetListFavoritosRepository().stream().filter(f -> f.getId() == idFav).findFirst().orElse(null);
+      if(fav == null)  return  RespuestasDto.Respuesta("No se encotro el producto favorito",null, 404);
+    
+      DummyJsonProducto dummyJsonProducto = _productoRespository.GetProductoRespository(fav.getIdProducto());
+      _favoritosRepository.EliminarFavorito(idFav);
 
       ProductoRespuestaDto producto = new ProductoRespuestaDto(
         dummyJsonProducto.id().intValue(),
@@ -115,7 +120,7 @@ public class FavoritosServiceImplement implements FavoritosService{
         dummyJsonProducto.price()
       );
 
-      return  RespuestasDto.Respuesta("Se elimino el producto: " + producto.getTitle()+ "De favoritos",producto , 200);
+      return  RespuestasDto.Respuesta("Se elimino el producto: " + producto.getTitle()+ "De favoritos",producto , 204);
 
     } catch (HttpClientErrorException e) {
 
@@ -129,10 +134,14 @@ public class FavoritosServiceImplement implements FavoritosService{
 
 
   @Override
-  public RespuestasDto<FavoritosSalidaDto> obtenerUnicoFavorito(int idProducto) {
+  public RespuestasDto<FavoritosSalidaDto> obtenerUnicoFavorito(int idFav) {
     try {
       
-      DummyJsonProducto dummyJsonProducto = _productoRespository.GetProductoRespository(idProducto);
+      Favorito fav = _favoritosRepository.GetListFavoritosRepository().stream().filter(f -> f.getId() == idFav).findFirst().orElse(null);
+      if(fav == null) return RespuestasDto.Respuesta("No se encontro el producto favorito", null, 404);
+
+      DummyJsonProducto dummyJsonProducto = _productoRespository.GetProductoRespository(fav.getIdProducto());
+      
       ProductoRespuestaDto producto = new ProductoRespuestaDto(
   
         dummyJsonProducto.id().intValue(),
@@ -140,19 +149,15 @@ public class FavoritosServiceImplement implements FavoritosService{
         dummyJsonProducto.price()
       );
   
-      FavoritosSalidaDto fav = _favoritosRepository.GetListFavoritosRepository()
-      .stream()
-      .filter(f -> f.getIdProducto() == producto.getId())
-      .map(f -> new FavoritosSalidaDto(
-        f.getNotaPersonal(),
-        f.getFechaAgregado(),
+      FavoritosSalidaDto favSalida = new FavoritosSalidaDto(
+        fav.getId(),
+        fav.getNotaPersonal(),
+        fav.getFechaAgregado(),
         producto
-      ))
-      .findFirst()
-      .orElse(null);
 
-      if(fav == null) return RespuestasDto.Respuesta("No se encontro el producto favorito", null, 404);
-      return RespuestasDto.Respuesta("Unico producto favorito", fav, 200);
+      );
+
+      return RespuestasDto.Respuesta("Unico producto favorito", favSalida, 200);
 
     } catch (HttpClientErrorException e) {
 
