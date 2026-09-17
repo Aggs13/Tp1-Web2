@@ -168,4 +168,40 @@ public class FavoritosServiceImplement implements FavoritosService{
     }
   }
 
+
+
+  @Override
+  public RespuestasDto<FavoritosSalidaDto> EditarFavorito(FavoritosEntradaDto fav) {
+    try {
+      
+      Favorito favorito = _favoritosRepository.GetListFavoritosRepository().stream()
+      .filter(f -> f.getId() == fav.getId()).map(f -> new Favorito(fav.getId(),  fav.getIdProducto(), fav.getNotaPersonal(), LocalDate.now()))
+      .findFirst()
+      .orElse(null);
+      if(favorito == null) return RespuestasDto.Respuesta("No se encotro el favorito", null, 404);
+
+      _favoritosRepository.ActualizarFavorito(favorito);
+
+      DummyJsonProducto dummyJsonProducto = _productoRespository.GetProductoRespository(favorito.getIdProducto());
+      ProductoRespuestaDto producto = new ProductoRespuestaDto(
+        dummyJsonProducto.id().intValue(),
+        dummyJsonProducto.title(),
+        dummyJsonProducto.price()
+      );
+
+      FavoritosSalidaDto favoritosSalida = new FavoritosSalidaDto(
+        favorito.getId(),
+        favorito.getNotaPersonal(),
+        favorito.getFechaAgregado(),
+        producto
+      );
+
+      return RespuestasDto.Respuesta("Se modifico el favorito", favoritosSalida, 200);
+
+      
+    } catch (HttpClientErrorException e) {
+      return RespuestasDto.Respuesta("Error "+ e.getMessage(), null, e.getStatusCode().value());
+    }
+  }
+
 }

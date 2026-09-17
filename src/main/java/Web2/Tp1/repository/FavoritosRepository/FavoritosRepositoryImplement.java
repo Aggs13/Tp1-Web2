@@ -50,9 +50,8 @@ public class FavoritosRepositoryImplement implements FavoritosRepository{
 
 
   @Override
-  public void ActualizarFavorito(int idProducto) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'ActualizarFavorito'");
+  public void ActualizarFavorito(Favorito fav) {
+    listaFavoritos.replaceAll(f -> f.getId() == fav.getId() ? fav : f);
   }
   
 

@@ -12,4 +12,5 @@ public interface FavoritosService {
   RespuestasDto<FavoritosSalidaDto> postFavoritoService(FavoritosEntradaDto fav);
   RespuestasDto<ProductoRespuestaDto> eliminarFavoritoService(int idFav);
   RespuestasDto<FavoritosSalidaDto> obtenerUnicoFavorito(int idFav);
+  RespuestasDto<FavoritosSalidaDto> EditarFavorito(FavoritosEntradaDto fav);
 }

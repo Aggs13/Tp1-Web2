@@ -11,7 +11,7 @@ public interface FavoritosRepository {
   public List<DummyJsonProducto> GetProductosFavoritosRepository();
   public void PostProductoFavorito(Favorito favorito);
   // public FavoritosSalidaDto ObtenerUnFavorito(ProductoRespuestaDto idProducto);
-  public void ActualizarFavorito(int idProducto);
+  public void ActualizarFavorito(Favorito fav);
   public void EliminarFavorito(int idFav);
   
   public List<Favorito> GetListFavoritosRepository(); // se usa para luego mapear al producto, se guarda lo necesario para relacionar con productos

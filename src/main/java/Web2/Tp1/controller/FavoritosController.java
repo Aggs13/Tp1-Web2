@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -52,10 +54,16 @@ public class FavoritosController {
   }
   
 
-  @DeleteMapping("{id}")
+  @DeleteMapping("/{id}")
   public ResponseEntity<RespuestasDto<ProductoRespuestaDto>> deleteFavorito(@PathVariable int id){
     RespuestasDto<ProductoRespuestaDto> respuesta = _favoritosService.eliminarFavoritoService(id); // <- Devuelve body para mostrar el producto que se elimino de favoritos
     return  ResponseEntity.status(respuesta.getEstado()).body(respuesta);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<RespuestasDto<FavoritosSalidaDto>> editarFavorito(@Valid @RequestBody FavoritosEntradaDto fav) {
+    RespuestasDto<FavoritosSalidaDto> respuesta = _favoritosService.EditarFavorito(fav);
+    return ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
   
 
