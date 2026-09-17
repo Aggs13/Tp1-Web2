@@ -8,7 +8,9 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@RestControllerAdvice
 public class GlobalExceptionHandler {
   @ExceptionHandler(RecursoNoEncontradoException.class)
     public ProblemDetail handleNoEncontrado(RecursoNoEncontradoException ex) {
@@ -29,7 +31,7 @@ public class GlobalExceptionHandler {
             errores.put(error.getField(), error.getDefaultMessage());
         }
         ProblemDetail problema = ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_REQUEST, "Uno o más campos no son válidos");
+        HttpStatus.BAD_REQUEST, "Uno o más campos no son válidos");
         problema.setTitle("Error de validación");
         problema.setProperty("errores", errores);
         return problema;
@@ -38,7 +40,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleGenerico(Exception ex) {
         ProblemDetail problema = ProblemDetail.forStatusAndDetail(
-                HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error inesperado");
+        HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error inesperado");
         problema.setTitle("Error interno");
         return problema;
     }

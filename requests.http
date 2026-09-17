@@ -1,0 +1,17 @@
+### PRODUCTOS éxito → 200
+GET http://localhost:8081/api/productos/1
+
+### PRODUCTOS error → 404
+GET http://localhost:8081/api/productos/9999
+
+### FAVORITOS éxito → 201
+POST http://localhost:8081/api/favoritos
+Content-Type: application/json
+
+{"idProducto": 43, "notaPersonal": "bueno"}
+
+### FAVORITOS error → 400 validación
+POST http://localhost:8081/api/favoritos
+Content-Type: application/json
+
+{"idProducto": 0, "notaPersonal": ""}

@@ -2,10 +2,14 @@ package Web2.Tp1.service.ProductosService;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 
 import Web2.Tp1.client.DummyJsonProducto;
 import Web2.Tp1.dto.ProductoRespuestaDto;
 import Web2.Tp1.dto.RespuestasDto;
+import Web2.Tp1.exception.RecursoNoEncontradoException;
+import Web2.Tp1.exception.ServicioExternoException;
 import Web2.Tp1.repository.ProductoRepository.ProductoRespository;
 
 @Service 
@@ -48,19 +52,10 @@ public class ProductoServiceImplement implements ProductoService{
         200
       );
 
-    } catch (HttpClientErrorException e) {
-
-      return RespuestasDto.Respuesta(
-        "No se encontró el producto ingresado",
-        null,
-        e.getStatusCode().value()
-      );
-    }catch(Exception e){
-      return RespuestasDto.Respuesta(
-        "Error interno",
-        null,
-        500
-      );
+    } catch (HttpClientErrorException.NotFound e) {
+      throw new RecursoNoEncontradoException("Producto " + id + " no encontrado");
+    } catch (ResourceAccessException | HttpServerErrorException e) {
+      throw new ServicioExternoException("DummyJSON no disponible", e);
     }
     
   }

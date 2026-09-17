@@ -14,20 +14,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FavoritosEntradaDto {
 
-  @Positive (message = "El id debe ser mayor a 0")
-  @NotNull 
-  private Integer id;
-
   @Positive(message = "El id del producto debe ser mayor a 0")
-  @NotNull 
+  @NotNull(message = "El id del producto es obligatorio")
   private Integer idProducto;
 
   @NotBlank(message = "la nota personal es obligatoria") 
   @Size(max = 200,message = "Maximo 200 caracteres")
   private String notaPersonal;
 
-  public FavoritosEntradaDto(Integer id ,Integer idProducto, String notaPersonal){
-    this.id = id;
+  public FavoritosEntradaDto(Integer idProducto, String notaPersonal){
     this.idProducto = idProducto; 
     this.notaPersonal = notaPersonal;
 
