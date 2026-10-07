@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Tp1Application",
+      "request": "launch",
+      "mainClass": "Web2.Tp1.Tp1Application",
+      "vmArgs": "-Duser.timezone=America/Argentina/Buenos_Aires"
+    }
+  ]
+}
