@@ -79,13 +79,18 @@ public class FavoritosServiceImplement implements FavoritosService{
       if(existe) return RespuestasDto.Respuesta("El producto ya esta en favoritos", null, 409);
 
       // genera el id a partir del ultimo agregado
-      int idFav = _favoritosRepository.GetListFavoritosRepository().stream().mapToInt(f -> f.getId()).max().orElse(0 ) + 1;
+
 
       // se crea el objeto Favorito y se le pasa al repository
-      Favorito fav = new Favorito(idFav, producto.id().intValue(), favorito.getNotaPersonal(), LocalDate.now());
+      Favorito fav = new Favorito();
+      fav.setNotaPersonal(favorito.getNotaPersonal());
+      fav.setIdProducto(producto.id().intValue());
+      fav.setListaId(favorito.getListaId());
+      fav.setFechaAgregado(LocalDate.now());
+      
       _favoritosRepository.PostProductoFavorito(fav);
       
-
+      
       // Mapeo producto agregado a favoritos para mostrar en el body
       ProductoRespuestaDto productoRespuestaDto = new ProductoRespuestaDto(producto.id().intValue(),producto.title(),producto.price());
       FavoritosSalidaDto favoritosSalidaDto = new FavoritosSalidaDto(
@@ -93,7 +98,7 @@ public class FavoritosServiceImplement implements FavoritosService{
         fav.getNotaPersonal(),
         fav.getFechaAgregado(),
         productoRespuestaDto
-
+        
       );
       return RespuestasDto.Respuesta("Se agrego el producto correctamente",favoritosSalidaDto, 201);
 
@@ -168,14 +173,14 @@ public class FavoritosServiceImplement implements FavoritosService{
 
 
   @Override
-  public RespuestasDto<FavoritosSalidaDto> EditarFavorito(int id, FavoritosEntradaDto fav) {
+  public RespuestasDto<FavoritosSalidaDto> EditarFavorito(int id, FavoritosEntradaDto favEdit) {
     
-      Favorito favorito = _favoritosRepository.GetListFavoritosRepository().stream()
-      .filter(f -> f.getId() == id).map(f -> new Favorito(id,  fav.getIdProducto(), fav.getNotaPersonal(), LocalDate.now()))
-      .findFirst()
-      .orElse(null);
+      Favorito favorito = _favoritosRepository.BuscarFavoritoPorId(id);
       if(favorito == null) throw new RecursoNoEncontradoException("Favorito con id " + id + " no encontrado");
 
+      favorito.setIdProducto(favEdit.getIdProducto());
+      favorito.setNotaPersonal(favEdit.getNotaPersonal());
+      
       _favoritosRepository.ActualizarFavorito(favorito);
 
       DummyJsonProducto dummyJsonProducto;

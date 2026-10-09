@@ -2,11 +2,15 @@ package Web2.Tp1.repository.FavoritosRepository;
 
 import java.time.LocalDate;
 
+import Web2.Tp1.repository.ListaRepository.ListaEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,4 +29,8 @@ public class FavoritoEntity {
 
   @Column(name = "fecha_alta",nullable = false)
   private LocalDate fechaAlta;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "lista_id")
+  private ListaEntity lista;
 }

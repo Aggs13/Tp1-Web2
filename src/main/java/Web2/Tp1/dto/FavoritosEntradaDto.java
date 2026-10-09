@@ -22,6 +22,10 @@ public class FavoritosEntradaDto {
   @Size(max = 200,message = "Maximo 200 caracteres")
   private String notaPersonal;
 
+  @NotNull(message = "El id de la lista es obligatorio")
+  @Positive(message = "El id de la lista debe ser mayor a 0")
+  private Integer listaId;
+
   public FavoritosEntradaDto(Integer idProducto, String notaPersonal){
     this.idProducto = idProducto; 
     this.notaPersonal = notaPersonal;
