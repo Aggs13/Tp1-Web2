@@ -39,7 +39,7 @@ public class ProductoServiceImplement implements ProductoService{
 
     try {
 
-      DummyJsonProducto p = productoRespository.GetProductoRespository(id);
+      DummyJsonProducto p = productoRespository.GetProductoPorIdRespository(id);
       ProductoRespuestaDto dto = new ProductoRespuestaDto(
         p.id().intValue(),
         p.title(),

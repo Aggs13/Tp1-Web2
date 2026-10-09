@@ -18,7 +18,7 @@ public class ProductoRespositoryImplement implements ProductoRespository{
 	}
 
 	@Override
-	public DummyJsonProducto  GetProductoRespository(int id) {
+	public DummyJsonProducto  GetProductoPorIdRespository(int id) {
 		
 		RestClient restClient = RestClient.create();
 		DummyJsonProducto product = restClient.get().uri("https://dummyjson.com/products/{id}",id).retrieve().body(DummyJsonProducto .class);

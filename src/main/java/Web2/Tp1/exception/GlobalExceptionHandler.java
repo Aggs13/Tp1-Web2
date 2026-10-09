@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -34,6 +35,16 @@ public class GlobalExceptionHandler {
         HttpStatus.BAD_REQUEST, "Uno o más campos no son válidos");
         problema.setTitle("Error de validación");
         problema.setProperty("errores", errores);
+        return problema;
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ProblemDetail handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+
+        String valor = ex.getValue() != null ? ex.getValue().toString() : "null";
+        ProblemDetail problema = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST, "El parámetro '" + ex.getName() + "' con valor '" + valor + "' no es válido");
+        problema.setTitle("Parámetro inválido");
         return problema;
     }
 

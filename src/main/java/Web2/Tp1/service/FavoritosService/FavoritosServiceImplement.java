@@ -37,7 +37,7 @@ public class FavoritosServiceImplement implements FavoritosService{
   public RespuestasDto<List<FavoritosSalidaDto>> getFavoritosService(){
 
     List<Favorito> fav = _favoritosRepository.GetListFavoritosRepository();
-    List<DummyJsonProducto> productos = _favoritosRepository.GetProductosFavoritosRepository();
+    List<DummyJsonProducto> productos = _productoRespository.GetProductosRepository();
 
     List<FavoritosSalidaDto> salidaFav = fav.stream().map(f -> { // Para cada favorito se ejecuta este bloque de codigo rodeado por {}
 
@@ -72,7 +72,7 @@ public class FavoritosServiceImplement implements FavoritosService{
     // busca el producto por el repository
     try {
       
-      producto = _productoRespository.GetProductoRespository(favorito.getIdProducto());
+      producto = _productoRespository.GetProductoPorIdRespository(favorito.getIdProducto());
 
       // revisa que el producto no este ya en la lista favoritos
       boolean existe = _favoritosRepository.GetListFavoritosRepository().stream().anyMatch(f -> f.getIdProducto() == favorito.getIdProducto());
@@ -113,7 +113,7 @@ public class FavoritosServiceImplement implements FavoritosService{
     
       DummyJsonProducto dummyJsonProducto;
       try {
-        dummyJsonProducto = _productoRespository.GetProductoRespository(fav.getIdProducto());
+        dummyJsonProducto = _productoRespository.GetProductoPorIdRespository(fav.getIdProducto());
       } catch (HttpClientErrorException.NotFound e) {
         throw new RecursoNoEncontradoException("Producto " + fav.getIdProducto() + " no existe en DummyJSON");
       } catch (ResourceAccessException | HttpServerErrorException e) {
@@ -127,19 +127,20 @@ public class FavoritosServiceImplement implements FavoritosService{
         dummyJsonProducto.price()
       );
 
-      return  RespuestasDto.Respuesta("Se elimino el producto: " + producto.getTitle()+ "De favoritos",producto , 204);
+      return  RespuestasDto.Respuesta("Se elimino el producto: " + producto.getTitle()+ "De favoritos",producto , 200);
   }
 
 
 
   @Override
   public RespuestasDto<FavoritosSalidaDto> obtenerUnicoFavorito(int idFav) {
-      Favorito fav = _favoritosRepository.GetListFavoritosRepository().stream().filter(f -> f.getId() == idFav).findFirst().orElse(null);
+
+      Favorito fav = _favoritosRepository.BuscarFavoritoPorId(idFav);
       if(fav == null) throw new RecursoNoEncontradoException("Favorito con id " + idFav + " no encontrado");
 
       DummyJsonProducto dummyJsonProducto;
       try {
-        dummyJsonProducto = _productoRespository.GetProductoRespository(fav.getIdProducto());
+        dummyJsonProducto = _productoRespository.GetProductoPorIdRespository(fav.getIdProducto());
       } catch (HttpClientErrorException.NotFound e) {
         throw new RecursoNoEncontradoException("Producto " + fav.getIdProducto() + " no existe en DummyJSON");
       } catch (ResourceAccessException | HttpServerErrorException e) {
@@ -180,7 +181,7 @@ public class FavoritosServiceImplement implements FavoritosService{
       DummyJsonProducto dummyJsonProducto;
       try {
 
-        dummyJsonProducto = _productoRespository.GetProductoRespository(favorito.getIdProducto());
+        dummyJsonProducto = _productoRespository.GetProductoPorIdRespository(favorito.getIdProducto());
 
       } catch (HttpClientErrorException.NotFound e) {
         throw new RecursoNoEncontradoException("Producto " + favorito.getIdProducto() + " no existe en DummyJSON");

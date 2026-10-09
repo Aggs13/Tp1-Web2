@@ -58,7 +58,7 @@ public class FavoritosController {
     return  ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
   
-  @Operation(summary = "Eliminar favorito", description = "Elimina por id, devuelve 204")
+  @Operation(summary = "Eliminar favorito", description = "Elimina por id, devuelve 200 con el producto eliminado")
   @DeleteMapping("/{id}")
   public ResponseEntity<RespuestasDto<ProductoRespuestaDto>> deleteFavorito(@PathVariable int id){
     RespuestasDto<ProductoRespuestaDto> respuesta = _favoritosService.eliminarFavoritoService(id); // <- Devuelve body para mostrar el producto que se elimino de favoritos

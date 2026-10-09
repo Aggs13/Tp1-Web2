@@ -8,6 +8,7 @@ import Web2.Tp1.dto.ProductoRespuestaDto;
 import Web2.Tp1.dto.RespuestasDto;
 
 public interface FavoritosService {
+  
   RespuestasDto<List<FavoritosSalidaDto>> getFavoritosService();
   RespuestasDto<FavoritosSalidaDto> postFavoritoService(FavoritosEntradaDto fav);
   RespuestasDto<ProductoRespuestaDto> eliminarFavoritoService(int idFav);

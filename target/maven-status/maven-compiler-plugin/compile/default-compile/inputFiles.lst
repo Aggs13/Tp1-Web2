@@ -11,8 +11,10 @@ D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\exception\RecursoNoEncon
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\exception\ServicioExternoException.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\model\Favorito.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\model\Producto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\repository\FavoritosRepository\FavoritoEntity.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\repository\FavoritosRepository\FavoritoJpaRepository.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\repository\FavoritosRepository\FavoritoRepositoryAdapter.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\repository\FavoritosRepository\FavoritosRepository.java
-D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\repository\FavoritosRepository\FavoritosRepositoryImplement.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\repository\ProductoRepository\ProductoRespository.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\repository\ProductoRepository\ProductoRespositoryImplement.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\service\FavoritosService\FavoritosService.java

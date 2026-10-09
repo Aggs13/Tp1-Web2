@@ -21,7 +21,7 @@ public class FavoritoEntity {
   private Integer productoId;
 
   @Column(name = "nota",nullable = false)
-  private String nota;
+  private String nota; 
 
   @Column(name = "fecha_alta",nullable = false)
   private LocalDate fechaAlta;
