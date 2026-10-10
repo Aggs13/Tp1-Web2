@@ -48,6 +48,13 @@ public class GlobalExceptionHandler {
         return problema;
     }
 
+    @ExceptionHandler(ConflictoException.class)
+    public ProblemDetail handleConflicto(ConflictoException ex) {
+        ProblemDetail problema = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        problema.setTitle("Conflicto");
+        return problema;
+    }
+
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleGenerico(Exception ex) {
         ProblemDetail problema = ProblemDetail.forStatusAndDetail(

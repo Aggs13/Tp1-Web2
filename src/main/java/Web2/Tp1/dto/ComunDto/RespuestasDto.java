@@ -1,4 +1,4 @@
-package Web2.Tp1.dto;
+package Web2.Tp1.dto.ComunDto;
 
 import lombok.Getter;
 import lombok.Setter;

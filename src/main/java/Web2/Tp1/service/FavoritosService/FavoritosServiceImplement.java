@@ -9,10 +9,10 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
 import Web2.Tp1.client.DummyJsonProducto;
-import Web2.Tp1.dto.FavoritosEntradaDto;
-import Web2.Tp1.dto.FavoritosSalidaDto;
-import Web2.Tp1.dto.ProductoRespuestaDto;
-import Web2.Tp1.dto.RespuestasDto;
+import Web2.Tp1.dto.FavoritoDto.FavoritosEntradaDto;
+import Web2.Tp1.dto.FavoritoDto.FavoritosSalidaDto;
+import Web2.Tp1.dto.ProductoDto.ProductoRespuestaDto;
+import Web2.Tp1.dto.ComunDto.RespuestasDto;
 import Web2.Tp1.exception.RecursoNoEncontradoException;
 import Web2.Tp1.exception.ServicioExternoException;
 import Web2.Tp1.model.Favorito;
@@ -39,25 +39,32 @@ public class FavoritosServiceImplement implements FavoritosService{
     List<Favorito> fav = _favoritosRepository.GetListFavoritosRepository();
     List<DummyJsonProducto> productos = _productoRespository.GetProductosRepository();
 
-    List<FavoritosSalidaDto> salidaFav = fav.stream().map(f -> { // Para cada favorito se ejecuta este bloque de codigo rodeado por {}
+    List<FavoritosSalidaDto> salidaFav = fav.stream().map(f -> { 
 
       // Se filtran los productos para obtener uno por id
     ProductoRespuestaDto producto = productos.stream()
         .filter(p -> p.id() == f.getIdProducto())
         .findFirst()
-        .map(p -> new ProductoRespuestaDto(
-          p.id().intValue(),
-          p.title(),         
-          p.price()          
-        ))
+        .map(p -> {
+          ProductoRespuestaDto dto = new ProductoRespuestaDto();
+          dto.setId(p.id().intValue());
+          dto.setTitle(p.title());
+          dto.setPrice(p.price());
+          return dto;
+        })
         .orElse(null);
+
       // se retorna el objeto con su producto y atrubutos
-      return new FavoritosSalidaDto(
-        f.getId(),
-        f.getNotaPersonal(),
-        f.getFechaAgregado(),
-        producto
-      );
+      FavoritosSalidaDto salidaDto = new FavoritosSalidaDto();
+
+      salidaDto.setId(f.getId());
+      salidaDto.setListaId(f.getListaId());
+      
+      salidaDto.setNotaPersonal(f.getNotaPersonal());
+      salidaDto.setFechaAgregado(f.getFechaAgregado());
+      salidaDto.setProductoFavorito(producto);
+
+      return salidaDto;
     }).toList();
 
     return RespuestasDto.Respuesta("Mostrando productos favoritos",salidaFav, 200);
@@ -92,14 +99,19 @@ public class FavoritosServiceImplement implements FavoritosService{
       
       
       // Mapeo producto agregado a favoritos para mostrar en el body
-      ProductoRespuestaDto productoRespuestaDto = new ProductoRespuestaDto(producto.id().intValue(),producto.title(),producto.price());
-      FavoritosSalidaDto favoritosSalidaDto = new FavoritosSalidaDto(
-        fav.getId(),
-        fav.getNotaPersonal(),
-        fav.getFechaAgregado(),
-        productoRespuestaDto
-        
-      );
+      ProductoRespuestaDto productoRespuestaDto = new ProductoRespuestaDto();
+      productoRespuestaDto.setId(producto.id().intValue());
+      productoRespuestaDto.setTitle(producto.title());
+      productoRespuestaDto.setPrice(producto.price());
+
+
+      FavoritosSalidaDto favoritosSalidaDto = new FavoritosSalidaDto();
+
+      favoritosSalidaDto.setId(fav.getId());
+      favoritosSalidaDto.setNotaPersonal(fav.getNotaPersonal());
+      favoritosSalidaDto.setFechaAgregado(fav.getFechaAgregado());
+      favoritosSalidaDto.setProductoFavorito(productoRespuestaDto);
+
       return RespuestasDto.Respuesta("Se agrego el producto correctamente",favoritosSalidaDto, 201);
 
     } catch (HttpClientErrorException.NotFound e) {
@@ -126,11 +138,10 @@ public class FavoritosServiceImplement implements FavoritosService{
       }
       _favoritosRepository.EliminarFavorito(idFav);
 
-      ProductoRespuestaDto producto = new ProductoRespuestaDto(
-        dummyJsonProducto.id().intValue(),
-        dummyJsonProducto.title(),
-        dummyJsonProducto.price()
-      );
+      ProductoRespuestaDto producto = new ProductoRespuestaDto();
+      producto.setId(dummyJsonProducto.id().intValue());
+      producto.setTitle(dummyJsonProducto.title());
+      producto.setPrice(dummyJsonProducto.price());
 
       return  RespuestasDto.Respuesta("Se elimino el producto: " + producto.getTitle()+ "De favoritos",producto , 200);
   }
@@ -152,20 +163,17 @@ public class FavoritosServiceImplement implements FavoritosService{
         throw new ServicioExternoException("DummyJSON no disponible", e);
       }
       
-      ProductoRespuestaDto producto = new ProductoRespuestaDto(
+      ProductoRespuestaDto producto = new ProductoRespuestaDto();
+      producto.setId(dummyJsonProducto.id().intValue());
+      producto.setTitle(dummyJsonProducto.title());
+      producto.setPrice(dummyJsonProducto.price());
   
-        dummyJsonProducto.id().intValue(),
-        dummyJsonProducto.title(),
-        dummyJsonProducto.price()
-      );
-  
-      FavoritosSalidaDto favSalida = new FavoritosSalidaDto(
-        fav.getId(),
-        fav.getNotaPersonal(),
-        fav.getFechaAgregado(),
-        producto
 
-      );
+      FavoritosSalidaDto favSalida = new FavoritosSalidaDto();
+      favSalida.setId(fav.getId());
+      favSalida.setNotaPersonal(fav.getNotaPersonal());
+      favSalida.setFechaAgregado(fav.getFechaAgregado());
+      favSalida.setProductoFavorito(producto);
 
       return RespuestasDto.Respuesta("Unico producto favorito", favSalida, 200);
   }
@@ -193,18 +201,17 @@ public class FavoritosServiceImplement implements FavoritosService{
       } catch (ResourceAccessException | HttpServerErrorException e) {
         throw new ServicioExternoException("DummyJSON no disponible", e);
       }
-      ProductoRespuestaDto producto = new ProductoRespuestaDto(
-        dummyJsonProducto.id().intValue(),
-        dummyJsonProducto.title(),
-        dummyJsonProducto.price()
-      );
+      
+      ProductoRespuestaDto producto = new ProductoRespuestaDto();
+      producto.setId(dummyJsonProducto.id().intValue());
+      producto.setTitle(dummyJsonProducto.title());
+      producto.setPrice(dummyJsonProducto.price());
 
-      FavoritosSalidaDto favoritosSalida = new FavoritosSalidaDto(
-        favorito.getId(),
-        favorito.getNotaPersonal(),
-        favorito.getFechaAgregado(),
-        producto
-      );
+      FavoritosSalidaDto favoritosSalida = new FavoritosSalidaDto();
+      favoritosSalida.setId(favorito.getId());
+      favoritosSalida.setNotaPersonal(favorito.getNotaPersonal());
+      favoritosSalida.setFechaAgregado(favorito.getFechaAgregado());
+      favoritosSalida.setProductoFavorito(producto);
 
       return RespuestasDto.Respuesta("Se modifico el favorito", favoritosSalida, 200);
   }

@@ -31,6 +31,6 @@ public class FavoritoEntity {
   private LocalDate fechaAlta;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "lista_id")
+  @JoinColumn(name = "lista_id",nullable = false)
   private ListaEntity lista;
 }

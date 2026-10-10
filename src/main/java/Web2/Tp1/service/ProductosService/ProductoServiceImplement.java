@@ -6,8 +6,8 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
 import Web2.Tp1.client.DummyJsonProducto;
-import Web2.Tp1.dto.ProductoRespuestaDto;
-import Web2.Tp1.dto.RespuestasDto;
+import Web2.Tp1.dto.ProductoDto.ProductoRespuestaDto;
+import Web2.Tp1.dto.ComunDto.RespuestasDto;
 import Web2.Tp1.exception.RecursoNoEncontradoException;
 import Web2.Tp1.exception.ServicioExternoException;
 import Web2.Tp1.repository.ProductoRepository.ProductoRespository;

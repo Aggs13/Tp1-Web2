@@ -12,6 +12,6 @@ public interface FavoritosRepository {
   public void PostProductoFavorito(Favorito favorito);
   public void ActualizarFavorito(Favorito fav);
   public void EliminarFavorito(int idFav);
-  public List<FavoritoEntity> BuscarPorIdLista(int id);
   public List<Favorito> GetListFavoritosRepository();
+  public List<Favorito> FiltrarPorLista(int id);
 } 

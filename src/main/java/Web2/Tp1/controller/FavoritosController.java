@@ -2,10 +2,10 @@ package Web2.Tp1.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import Web2.Tp1.dto.FavoritosEntradaDto;
-import Web2.Tp1.dto.FavoritosSalidaDto;
-import Web2.Tp1.dto.ProductoRespuestaDto;
-import Web2.Tp1.dto.RespuestasDto;
+import Web2.Tp1.dto.FavoritoDto.FavoritosEntradaDto;
+import Web2.Tp1.dto.FavoritoDto.FavoritosSalidaDto;
+import Web2.Tp1.dto.ProductoDto.ProductoRespuestaDto;
+import Web2.Tp1.dto.ComunDto.RespuestasDto;
 import Web2.Tp1.service.FavoritosService.FavoritosService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -8,6 +8,7 @@ public interface ListaRepository {
 
   public Lista GuardarLista(Lista lista);
   public Lista BuscarListaPorId(long id);
+  public Lista BuscarListaPorNombre(String nombre);
   public List<Lista> GetListListasRepository();
   public void ActualizarLista(Lista lista);
   public void EliminarLista(long id);

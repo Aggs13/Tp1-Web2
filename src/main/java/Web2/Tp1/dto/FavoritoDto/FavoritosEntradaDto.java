@@ -1,4 +1,4 @@
-package Web2.Tp1.dto;
+package Web2.Tp1.dto.FavoritoDto;
 
 
 import jakarta.validation.constraints.NotBlank;

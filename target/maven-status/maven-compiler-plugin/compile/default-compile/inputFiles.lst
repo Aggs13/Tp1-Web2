@@ -3,10 +3,13 @@ D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\client\DummyJsonProducto
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\controller\FavoritosController.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\controller\ListaController.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\controller\ProductoController.java
-D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\FavoritosEntradaDto.java
-D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\FavoritosSalidaDto.java
-D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\ProductoRespuestaDto.java
-D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\RespuestasDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\ComunDto\RespuestasDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\FavoritoDto\FavoritosEntradaDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\FavoritoDto\FavoritosSalidaDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\ListaDto\ListaEntradaDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\ListaDto\ListaSalidaDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\ProductoDto\ProductoRespuestaDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\exception\ConflictoException.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\exception\GlobalExceptionHandler.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\exception\RecursoNoEncontradoException.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\exception\ServicioExternoException.java

@@ -3,21 +3,27 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 import Web2.Tp1.exception.RecursoNoEncontradoException;
 import Web2.Tp1.model.Favorito;
+import Web2.Tp1.repository.ListaRepository.ListaJpaRepository;
 
 @Repository 
 public class FavoritoRepositoryAdapter implements FavoritosRepository{
 
   private final FavoritoJpaRepository repository;
-  
-  public FavoritoRepositoryAdapter(FavoritoJpaRepository r){
+  private final ListaJpaRepository listaRepository;
+  public FavoritoRepositoryAdapter(FavoritoJpaRepository r, ListaJpaRepository l){
     this.repository = r;
+    this.listaRepository = l;
   }
 
   @Override
   public void PostProductoFavorito(Favorito favorito) {
 
+    
+   
+
     FavoritoEntity f = new FavoritoEntity();
     f.setProductoId(favorito.getIdProducto());
+    f.setLista(listaRepository.getReferenceById((long) favorito.getListaId()));
     f.setNota(favorito.getNotaPersonal());
     f.setFechaAlta(favorito.getFechaAgregado());
     repository.save(f);
@@ -31,6 +37,7 @@ public class FavoritoRepositoryAdapter implements FavoritosRepository{
       .orElseThrow(() -> new RecursoNoEncontradoException("Favorito con id " + fav.getId() + " no encontrado"));
     fEntity.setProductoId(fav.getIdProducto());
     fEntity.setNota(fav.getNotaPersonal());
+    fEntity.setLista(listaRepository.getReferenceById((long)fav.getListaId()));
     repository.save(fEntity);
   }
 
@@ -71,10 +78,24 @@ public class FavoritoRepositoryAdapter implements FavoritosRepository{
     }).orElse(null);
   }
 
+
   @Override
-  public List<FavoritoEntity> BuscarPorIdLista(int id) {
-    // TODO: implementar con repository.findByListaId + mapeo a dominio
-    throw new UnsupportedOperationException("Unimplemented method 'BuscarPorIdLista'");
+  public List<Favorito> FiltrarPorLista(int id) {
+    return repository
+    .findAll()
+    .stream()
+    .filter(f -> f.getLista() != null && f.getLista().getId() != null && f.getLista().getId() == id).map(f -> {
+      Favorito favorito = new Favorito();
+      
+      favorito.setListaId(id);
+      favorito.setIdProducto(f.getProductoId());
+      favorito.setNotaPersonal(f.getNota());
+      favorito.setFechaAgregado(f.getFechaAlta());
+
+      return favorito;
+    })
+    .toList();
+
   }
 
   

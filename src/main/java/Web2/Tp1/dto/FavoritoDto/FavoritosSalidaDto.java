@@ -1,7 +1,8 @@
-package Web2.Tp1.dto;
+package Web2.Tp1.dto.FavoritoDto;
 
 import java.time.LocalDate;
 
+import Web2.Tp1.dto.ProductoDto.ProductoRespuestaDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,15 +14,12 @@ public class FavoritosSalidaDto {
   ProductoRespuestaDto productoFavorito;
   private String notaPersonal;
   private LocalDate fechaAgregado;
+  private int listaId;
+  
 
 
   public FavoritosSalidaDto(){}
 
-  public FavoritosSalidaDto(int id,String notaPersonal, LocalDate fechaAgregado,ProductoRespuestaDto producto){
-    this.id = id;
-    this.productoFavorito = producto;
-    this.notaPersonal = notaPersonal;
-    this.fechaAgregado = fechaAgregado;
-  }
+
 
 }
