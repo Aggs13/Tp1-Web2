@@ -78,3 +78,19 @@ Esto se resuelve con una migración nueva (`V5__lista_id_obligatorio.sql`) y nun
 ## 7. Transacciones
 
 `POST /api/listas/{origenId}/mover-favoritos` hace N `UPDATE`s (reasignar cada favorito) + 1 `DELETE` (la lista origen) bajo un `@Transactional` en `ListaService.moverFavoritos`. Sin él, si el `DELETE` fallara después de los `UPDATE`s ya confirmados, quedaría una mudanza a medias (favoritos en destino con la origen todavía viva), violando la atomicidad de ACID. Con `@Transactional` es todo o nada: ante un fallo hace rollback y la base queda como antes.
+
+## 8. Documentación
+
+Swagger ya muestra `productos`, `favoritos` y `listas` (`@Tag` + `@Operation` con descripción en cada endpoint). Abrir: http://localhost:8081/swagger-ui.html
+
+### Levantar PostgreSQL
+
+1. Copiar `.env.example` como `.env` y completar la contraseña.
+2. `docker compose up -d` (imagen `postgres:16`, contenedor `tp2-postgres`, puerto `5433`, datos en volumen `pgdata`).
+3. Correr la app (`Tp1Application`). Sin Docker: instalación local de PostgreSQL con los mismos datos de conexión del `.env`.
+4. El esquema lo aplica Flyway (`ddl-auto=validate`, Hibernate no toca el DDL).
+
+### Confirmar migraciones
+
+- En el log al arrancar: `Flyway ... successfully applied N migrations`.
+- En la DB: `SELECT version, description, success FROM flyway_schema_history ORDER BY installed_rank;` (deben estar `V1`–`V5` en `t`).

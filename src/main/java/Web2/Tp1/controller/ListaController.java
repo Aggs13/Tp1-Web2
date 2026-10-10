@@ -19,7 +19,6 @@ import Web2.Tp1.dto.ListaDto.MoverFavoritosDto;
 import Web2.Tp1.service.ListaService.ListaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
