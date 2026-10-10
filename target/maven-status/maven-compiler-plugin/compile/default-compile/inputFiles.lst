@@ -8,6 +8,7 @@ D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\FavoritoDto\Favorito
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\FavoritoDto\FavoritosSalidaDto.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\ListaDto\ListaEntradaDto.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\ListaDto\ListaSalidaDto.java
+D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\ListaDto\MoverFavoritosDto.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\dto\ProductoDto\ProductoRespuestaDto.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\exception\ConflictoException.java
 D:\Agus\Proyectos_springBoot\Tp1\src\main\java\Web2\Tp1\exception\GlobalExceptionHandler.java

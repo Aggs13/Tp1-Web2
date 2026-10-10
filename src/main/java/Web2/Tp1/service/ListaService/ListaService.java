@@ -17,5 +17,7 @@ public interface ListaService {
 
   RespuestasDto<List<FavoritosSalidaDto>> favoritosDeLista(long id);
 
+  RespuestasDto<List<FavoritosSalidaDto>> moverFavoritos(long id,long destinId);
+  
   void eliminarLista(long id);
 }

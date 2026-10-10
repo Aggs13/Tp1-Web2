@@ -15,9 +15,11 @@ import Web2.Tp1.dto.ComunDto.RespuestasDto;
 import Web2.Tp1.dto.FavoritoDto.FavoritosSalidaDto;
 import Web2.Tp1.dto.ListaDto.ListaEntradaDto;
 import Web2.Tp1.dto.ListaDto.ListaSalidaDto;
+import Web2.Tp1.dto.ListaDto.MoverFavoritosDto;
 import Web2.Tp1.service.ListaService.ListaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
@@ -64,5 +66,13 @@ public class ListaController {
   public ResponseEntity<Void> eliminarLista(@PathVariable long id) {
     _listaService.eliminarLista(id);
     return ResponseEntity.noContent().build();
+  }
+
+  
+  @Operation(summary = "Mover favoritos", description = "Mueve todos los favoritos de la lista origen a la destino y elimina la origen, devuelve 200")
+  @PostMapping("/{origenId}/mover-favoritos")
+  public ResponseEntity<RespuestasDto<List<FavoritosSalidaDto>>> moverFavoritos(@PathVariable long origenId, @Valid @RequestBody MoverFavoritosDto dto) {
+    RespuestasDto<List<FavoritosSalidaDto>> respuesta = _listaService.moverFavoritos(origenId, dto.getDestinoId());
+    return ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
 }

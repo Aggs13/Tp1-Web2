@@ -10,10 +10,12 @@ import Web2.Tp1.dto.ListaDto.ListaSalidaDto;
 import Web2.Tp1.dto.ProductoDto.ProductoRespuestaDto;
 import Web2.Tp1.exception.ConflictoException;
 import Web2.Tp1.exception.RecursoNoEncontradoException;
+import Web2.Tp1.model.Favorito;
 import Web2.Tp1.model.Lista;
 import Web2.Tp1.repository.FavoritosRepository.FavoritosRepository;
 import Web2.Tp1.repository.ListaRepository.ListaRepository;
 import Web2.Tp1.repository.ProductoRepository.ProductoRespository;
+import jakarta.transaction.Transactional;
 import Web2.Tp1.client.DummyJsonProducto;
 import Web2.Tp1.dto.ComunDto.RespuestasDto;
 
@@ -115,6 +117,44 @@ public class ListaServiceImplement implements ListaService{
     if (tieneFavoritos) throw new ConflictoException("No se puede eliminar la lista porque todavía tiene favoritos");
 
     repository.EliminarLista(id);
+  }
+
+  @Override
+  @Transactional 
+  public RespuestasDto<List<FavoritosSalidaDto>> moverFavoritos(long origenId,long destinoId) {
+
+    Lista listaDestino = repository.BuscarListaPorId(destinoId);
+    if(listaDestino == null) throw new RecursoNoEncontradoException("No se encontro la lista de destino");
+
+    Lista listaOrigen = repository.BuscarListaPorId(origenId);
+    if(listaOrigen == null) throw new RecursoNoEncontradoException("No se encontro la lista de origen");
+
+    List<FavoritosSalidaDto> favoritosMovidos = favoritosRepository.FiltrarPorLista((int) origenId).stream().map(f -> {
+
+      Favorito moverFav = new Favorito();
+      moverFav.setListaId((int)destinoId);
+      moverFav.setId(f.getId());
+      moverFav.setIdProducto(f.getIdProducto());
+      moverFav.setNotaPersonal(f.getNotaPersonal());
+      
+      favoritosRepository.ActualizarFavorito(moverFav);
+
+      FavoritosSalidaDto salida = new FavoritosSalidaDto();
+      salida.setFechaAgregado(f.getFechaAgregado());
+      salida.setId(f.getId());
+      salida.setListaId((int) destinoId);
+      salida.setNotaPersonal(f.getNotaPersonal());
+      
+      return salida;
+      
+    }).toList();
+
+    
+    repository.EliminarLista(origenId);
+
+    return  RespuestasDto.Respuesta("Se movieron los productos de "+listaOrigen.getNombre()+ "a la lista" + listaDestino.getNombre() ,favoritosMovidos , 200);
+
+
   }
 
 
