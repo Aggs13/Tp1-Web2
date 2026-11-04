@@ -1,4 +1,10 @@
 package Web2.Tp1.service.UsuarioService;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+
+import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -6,22 +12,46 @@ import Web2.Tp1.dto.UsuarioDto.NuevoUsuarioRequiredDto;
 import Web2.Tp1.dto.UsuarioDto.UsuarioLoginRequiredDto;
 import Web2.Tp1.dto.UsuarioDto.UsuarioTokenDto;
 import Web2.Tp1.exception.ConflictoException;
+import Web2.Tp1.exception.RecursoNoEncontradoException;
 import Web2.Tp1.model.Usuario;
 import Web2.Tp1.repository.UsuarioRepository.UsuarioRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+
 
 @Service
 public class UsuarioServiceImplement implements UsuarioService{
 
   private final UsuarioRepository _UsuarioRepository;
 
+  @Value("${jwt.secret}")
+  private String jwtSecret;
+
+  @Value("${jwt.expiration}")
+  private long jwtVencimiento;
+
+
   public UsuarioServiceImplement(UsuarioRepository r){
     this._UsuarioRepository = r;
   }
 
   @Override
-  public String UsuarioLogin(UsuarioLoginRequiredDto usuario) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'UsuarioLogin'");
+  public String UsuarioLogin(UsuarioLoginRequiredDto usuarioLogin) {
+    Usuario usuarioVerificar = _UsuarioRepository.buscarPorEmail(usuarioLogin.getEmail());
+
+    if(usuarioVerificar == null) throw new RecursoNoEncontradoException("El usuario con email " + usuarioLogin.email + " no existe");
+
+    boolean verificarPass = VerificarPass(usuarioLogin.getPass(), usuarioVerificar.getPasswordHash());
+    if(!verificarPass) throw new ConflictoException("La ingresada contraseña es incorrecta ");
+
+    
+    UsuarioTokenDto usuarioToken = new UsuarioTokenDto();
+
+    usuarioToken.setEmail(usuarioVerificar.getEmail());
+    usuarioToken.setRol(usuarioVerificar.getRol());
+
+    return GenerarToken(usuarioToken);
+
   }
 
   @Override
@@ -50,8 +80,27 @@ public class UsuarioServiceImplement implements UsuarioService{
     return encoder.encode(pass);
   }
 
+  private Boolean VerificarPass(String passIngresada,String PassGuardada){
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    return encoder.matches(passIngresada, PassGuardada);
+
+  }
+
   private String GenerarToken(UsuarioTokenDto usuarioTokenDto){
-    return "";
+
+    // 1. Convertimos el string secreto en una clave criptográfica (SecretKey)
+    SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+
+    // 2. Armamos el token con el email (subject), el rol (claim), fecha de emisión y expiración
+    return Jwts.builder()
+      .subject(usuarioTokenDto.getEmail())                 // Quién es el usuario (sub)
+      .claim("rol", usuarioTokenDto.getRol())              // Datos extra (el rol)
+      .issuedAt(new Date())                                // Cuándo se creó (iat)
+      .expiration(new Date(System.currentTimeMillis() + jwtVencimiento)) // Cuándo vence (exp)
+      .signWith(key)                                       // Lo firmamos con nuestra clave secreta
+      .compact();                                          // Genera el String final "eyJhbGci..."
+
   }
 
 }

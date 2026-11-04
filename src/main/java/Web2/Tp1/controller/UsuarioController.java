@@ -29,7 +29,7 @@ public class UsuarioController {
   @PostMapping("/registro")
   public ResponseEntity<RespuestasDto<String>> registrar(@Valid @RequestBody NuevoUsuarioRequiredDto usuario) {
     String resultado = _usuarioService.NuevoUsuario(usuario);
-    RespuestasDto<String> respuesta = RespuestasDto.Respuesta(resultado, resultado, 201);
+    RespuestasDto<String> respuesta = RespuestasDto.Respuesta(resultado, 201);
     return ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
 
