@@ -1,1 +1,0 @@
-ALTER TABLE IF EXISTS listas RENAME TO lista;

@@ -1,10 +1,13 @@
 package Web2.Tp1.repository.UsuarioRepository;
 
+import org.springframework.stereotype.Repository;
+
 import Web2.Tp1.model.Usuario;
 
-public interface UsuarioRepository {
-  
-  Usuario guardar(Usuario usuario);
+@Repository 
+public interface UsuarioRepository{
+
+  String guardar(Usuario usuario);
   Usuario buscarPorEmail(String email);
   boolean existePorEmail(String email);
   

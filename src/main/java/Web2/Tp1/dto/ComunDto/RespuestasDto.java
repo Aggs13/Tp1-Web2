@@ -17,9 +17,19 @@ public class RespuestasDto<T> {
     this.datos = datos;
     this.estado = estado;
   }
+  
+  public RespuestasDto(String mensaje,int estado){
+    this.mensaje = mensaje;
+    this.estado = estado;
+  }
 
   public static <T> RespuestasDto<T> Respuesta(String mensaje, T datos, int estado){ 
     return new RespuestasDto<>(mensaje,datos,estado);
   }
+
+    public static <T> RespuestasDto<T> Respuesta(String mensaje,  int estado){ 
+    return new RespuestasDto<>(mensaje,estado);
+  }
+
 
 }
