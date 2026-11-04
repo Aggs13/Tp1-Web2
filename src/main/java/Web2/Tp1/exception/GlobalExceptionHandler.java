@@ -69,4 +69,11 @@ public class GlobalExceptionHandler {
         problema.setTitle("Error interno");
         return problema;
     }
+
+    @ExceptionHandler(AccesoDenegadoException.class)
+    public ProblemDetail handleAccesoDenegado(AccesoDenegadoException ex) {
+        ProblemDetail problema = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
+        problema.setTitle("Acceso denegado");
+        return problema;
+    }
 }

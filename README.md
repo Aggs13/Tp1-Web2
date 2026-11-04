@@ -94,3 +94,16 @@ Swagger ya muestra `productos`, `favoritos` y `listas` (`@Tag` + `@Operation` co
 
 - En el log al arrancar: `Flyway ... successfully applied N migrations`.
 - En la DB: `SELECT version, description, success FROM flyway_schema_history ORDER BY installed_rank;` (deben estar `V1`–`V5` en `t`).
+
+---
+
+# TP3 — Seguridad (JWT) y Autorización
+
+## 4. Autorización: dónde vive la regla y por qué
+
+La regla de autorización sobre la propiedad de las listas (`validarPropiedadLista`, que verifica que `lista.usuarioId` coincida con el usuario autenticado en el `SecurityContext` o que tenga el rol `ROLE_ADMIN`) vive en la **capa de Servicio (`ListaServiceImplement`)** y no en el `Controller` ni en un filtro HTTP:
+
+- **¿Por qué en el Service y no en el Controller?**
+  1. **Es una regla de negocio / dominio:** Decidir primero si la lista existe (`404 Not Found`) y luego si el usuario actual es dueño o `ADMIN` (`403 Forbidden` mediante `AccesoDenegadoException`) requiere consultar el repositorio (`BuscarListaPorId`). El Controller solo debe ocuparse de recibir el request HTTP, validar el formato de entrada y devolver la respuesta, sin mezclar lógica de negocio ni acceso a datos.
+  2. **Reutilización y consistencia:** Si el día de mañana otro caso de uso o servicio interno invoca los métodos de `ListaService` (por ejemplo, al mover favoritos entre dos listas donde hay que validar tanto la lista origen como la destino), la protección se aplica en un único lugar sin duplicar validaciones en cada endpoint del Controller.
+  3. **¿Por qué no en el filtro JWT?** El filtro (`JwtFilter`) trabaja a nivel de URL/transporte autenticando el token antes de llegar a la lógica de negocio; no conoce ni debe consultar la base de datos para saber a qué `usuario_id` pertenece el `{id}` de una lista puntual.

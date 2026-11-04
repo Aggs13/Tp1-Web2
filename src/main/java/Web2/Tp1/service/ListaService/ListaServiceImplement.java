@@ -2,12 +2,14 @@ package Web2.Tp1.service.ListaService;
 
 import java.util.List;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import Web2.Tp1.dto.FavoritoDto.FavoritosSalidaDto;
 import Web2.Tp1.dto.ListaDto.ListaEntradaDto;
 import Web2.Tp1.dto.ListaDto.ListaSalidaDto;
 import Web2.Tp1.dto.ProductoDto.ProductoRespuestaDto;
+import Web2.Tp1.exception.AccesoDenegadoException;
 import Web2.Tp1.exception.ConflictoException;
 import Web2.Tp1.exception.RecursoNoEncontradoException;
 import Web2.Tp1.model.Favorito;
@@ -33,12 +35,15 @@ public class ListaServiceImplement implements ListaService{
 
   @Override
   public RespuestasDto<ListaSalidaDto> crearLista(ListaEntradaDto listaDto) {
-    Lista existe = repository.BuscarListaPorNombre(listaDto.getNombre());
-    if(existe != null) throw new ConflictoException("Ya existe una lista con ese nombre");
+    Long usuarioId = obtenerUsuarioIdActual();
 
+    boolean existe = repository.GetListListasRepository().stream()
+        .anyMatch(l -> usuarioId.equals(l.getUsuarioId()) && l.getNombre().equalsIgnoreCase(listaDto.getNombre()));
+    if(existe) throw new ConflictoException("Ya existe una lista con ese nombre");
 
     Lista nuevaLista = new Lista();
     nuevaLista.setNombre(listaDto.getNombre());
+    nuevaLista.setUsuarioId(usuarioId);
     Lista guardada = repository.GuardarLista(nuevaLista);
 
     ListaSalidaDto listaSalida = new ListaSalidaDto();
@@ -51,17 +56,19 @@ public class ListaServiceImplement implements ListaService{
 
   @Override
   public RespuestasDto<List<ListaSalidaDto>> listarListas() {
-   List<ListaSalidaDto> listas = repository.GetListListasRepository().stream().map(l -> {
+    Long usuarioId = obtenerUsuarioIdActual();
+    boolean admin = esAdmin();
 
-    ListaSalidaDto listaSalidaDto = new ListaSalidaDto();
-    listaSalidaDto.setNombre(l.getNombre());
-    listaSalidaDto.setId(l.getId());
+    List<ListaSalidaDto> listas = repository.GetListListasRepository().stream()
+        .filter(l -> admin || usuarioId.equals(l.getUsuarioId()))
+        .map(l -> {
+          ListaSalidaDto listaSalidaDto = new ListaSalidaDto();
+          listaSalidaDto.setNombre(l.getNombre());
+          listaSalidaDto.setId(l.getId());
+          return listaSalidaDto;
+        }).toList();
 
-    return listaSalidaDto;
-
-   }).toList();
-
-   return RespuestasDto.Respuesta("Mostrando listas", listas, 200);
+    return RespuestasDto.Respuesta("Mostrando listas", listas, 200);
   } 
 
   @Override
@@ -69,6 +76,8 @@ public class ListaServiceImplement implements ListaService{
 
     Lista lista = repository.BuscarListaPorId(id);
     if (lista == null) throw new RecursoNoEncontradoException("Lista con id " + id + " no encontrada");
+
+    validarPropiedadLista(lista);
 
     ListaSalidaDto salida = new ListaSalidaDto();
     salida.setId(lista.getId());
@@ -82,6 +91,8 @@ public class ListaServiceImplement implements ListaService{
 
     Lista lista = repository.BuscarListaPorId((int) id);
     if(lista == null) throw new RecursoNoEncontradoException("No se encontro la lista");
+
+    validarPropiedadLista(lista);
 
     List<FavoritosSalidaDto> favoritosSalida = favoritosRepository.FiltrarPorLista((int)id).stream()
     .map(f -> {
@@ -113,6 +124,8 @@ public class ListaServiceImplement implements ListaService{
     Lista lista = repository.BuscarListaPorId(id);
     if (lista == null) throw new RecursoNoEncontradoException("Lista con id " + id + " no encontrada");
 
+    validarPropiedadLista(lista);
+
     boolean tieneFavoritos = !favoritosRepository.FiltrarPorLista((int) id).isEmpty();
     if (tieneFavoritos) throw new ConflictoException("No se puede eliminar la lista porque todavía tiene favoritos");
 
@@ -128,6 +141,9 @@ public class ListaServiceImplement implements ListaService{
 
     Lista listaOrigen = repository.BuscarListaPorId(origenId);
     if(listaOrigen == null) throw new RecursoNoEncontradoException("No se encontro la lista de origen");
+
+    validarPropiedadLista(listaOrigen);
+    validarPropiedadLista(listaDestino);
 
     List<FavoritosSalidaDto> favoritosMovidos = favoritosRepository.FiltrarPorLista((int) origenId).stream().map(f -> {
 
@@ -157,6 +173,21 @@ public class ListaServiceImplement implements ListaService{
 
   }
 
+  private Long obtenerUsuarioIdActual() {
+    var auth = SecurityContextHolder.getContext().getAuthentication();
+    return Long.valueOf(auth.getPrincipal().toString());
+  }
 
+  private boolean esAdmin() {
+    var auth = SecurityContextHolder.getContext().getAuthentication();
+    return auth.getAuthorities().stream()
+        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+  }
+
+  private void validarPropiedadLista(Lista lista) {
+    if (!esAdmin() && !obtenerUsuarioIdActual().equals(lista.getUsuarioId())) {
+      throw new AccesoDenegadoException("No tenés permiso para acceder a esta lista");
+    }
+  }
   
 }

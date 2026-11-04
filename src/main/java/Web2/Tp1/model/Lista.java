@@ -8,5 +8,5 @@ import lombok.Setter;
 public class Lista {
   private Long id;
   private String nombre;
-  
+  private Long usuarioId;
 }

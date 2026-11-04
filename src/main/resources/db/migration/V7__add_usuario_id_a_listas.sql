@@ -1,0 +1,1 @@
+ALTER TABLE lista ADD COLUMN usuario_id BIGINT REFERENCES usuarios(id);
