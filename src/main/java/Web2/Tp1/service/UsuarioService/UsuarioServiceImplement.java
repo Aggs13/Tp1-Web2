@@ -12,7 +12,7 @@ import Web2.Tp1.dto.UsuarioDto.NuevoUsuarioRequiredDto;
 import Web2.Tp1.dto.UsuarioDto.UsuarioLoginRequiredDto;
 import Web2.Tp1.dto.UsuarioDto.UsuarioTokenDto;
 import Web2.Tp1.exception.ConflictoException;
-import Web2.Tp1.exception.RecursoNoEncontradoException;
+import Web2.Tp1.exception.NoAutorizadoException;
 import Web2.Tp1.model.Usuario;
 import Web2.Tp1.repository.UsuarioRepository.UsuarioRepository;
 import io.jsonwebtoken.Jwts;
@@ -39,15 +39,15 @@ public class UsuarioServiceImplement implements UsuarioService{
   public String UsuarioLogin(UsuarioLoginRequiredDto usuarioLogin) {
     Usuario usuarioVerificar = _UsuarioRepository.buscarPorEmail(usuarioLogin.getEmail());
 
-    if(usuarioVerificar == null) throw new RecursoNoEncontradoException("El usuario con email " + usuarioLogin.email + " no existe");
+    if(usuarioVerificar == null) throw new NoAutorizadoException("El usuario con email " + usuarioLogin.email + " no existe");
 
     boolean verificarPass = VerificarPass(usuarioLogin.getPass(), usuarioVerificar.getPasswordHash());
-    if(!verificarPass) throw new ConflictoException("La ingresada contraseña es incorrecta ");
+    if(!verificarPass) throw new NoAutorizadoException ("La ingresada contraseña es incorrecta ");
 
     
     UsuarioTokenDto usuarioToken = new UsuarioTokenDto();
 
-    usuarioToken.setEmail(usuarioVerificar.getEmail());
+    usuarioToken.setId(usuarioVerificar.getId());
     usuarioToken.setRol(usuarioVerificar.getRol());
 
     return GenerarToken(usuarioToken);
@@ -63,7 +63,7 @@ public class UsuarioServiceImplement implements UsuarioService{
     String hasPass = HashPass(usuario.pass);
 
     Usuario nuevoUsuario = new Usuario();
-    nuevoUsuario.setRol("USUARIO");
+    nuevoUsuario.setRol("USER");
     nuevoUsuario.setEmail(usuario.getEmail());
     nuevoUsuario.setPasswordHash(hasPass);
 
@@ -94,8 +94,8 @@ public class UsuarioServiceImplement implements UsuarioService{
 
     // 2. Armamos el token con el email (subject), el rol (claim), fecha de emisión y expiración
     return Jwts.builder()
-      .subject(usuarioTokenDto.getEmail())                 // Quién es el usuario (sub)
-      .claim("rol", usuarioTokenDto.getRol())              // Datos extra (el rol)
+      .claim("id", usuarioTokenDto.getId())               // Datos (Id, rol)
+      .claim("rol", usuarioTokenDto.getRol())              
       .issuedAt(new Date())                                // Cuándo se creó (iat)
       .expiration(new Date(System.currentTimeMillis() + jwtVencimiento)) // Cuándo vence (exp)
       .signWith(key)                                       // Lo firmamos con nuestra clave secreta

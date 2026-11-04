@@ -55,6 +55,13 @@ public class GlobalExceptionHandler {
         return problema;
     }
 
+    @ExceptionHandler(NoAutorizadoException.class)
+    public ProblemDetail handleNoAutorizado(NoAutorizadoException ex) {
+        ProblemDetail problema = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        problema.setTitle("No autorizado");
+        return problema;
+    }
+
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleGenerico(Exception ex) {
         ProblemDetail problema = ProblemDetail.forStatusAndDetail(

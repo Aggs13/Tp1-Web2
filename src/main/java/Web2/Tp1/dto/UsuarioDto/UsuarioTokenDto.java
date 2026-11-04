@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter  @Setter 
 public class UsuarioTokenDto {
   public String rol;
-  public String email;
+  public long id;
 }
