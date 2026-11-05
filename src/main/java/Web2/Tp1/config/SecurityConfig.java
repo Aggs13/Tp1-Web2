@@ -23,12 +23,12 @@ public class SecurityConfig {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/**", "/api/productos/**").permitAll()
+            .requestMatchers("/health", "/api/auth/**", "/api/productos/**").permitAll()
             .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
             .anyRequest().authenticated()
         )
         .exceptionHandling(ex -> ex
-          .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+            .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
         )
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

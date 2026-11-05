@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/listas")
-@Tag(name = "Listas")
+@Tag(name = "Listas", description = "Gestión de listas de favoritos (Requiere autenticación Bearer JWT)")
 public class ListaController {
 
   private final ListaService _listaService;
@@ -32,35 +32,35 @@ public class ListaController {
     this._listaService = listaService;
   }
 
-  @Operation(summary = "Crear lista", description = "Crea una lista de favoritos, devuelve 201")
+  @Operation(summary = "Crear lista", description = "Requiere autenticación JWT. Crea una lista asociada al usuario autenticado, devuelve 201 (o 409 si ya tiene una con ese nombre)")
   @PostMapping()
   public ResponseEntity<RespuestasDto<ListaSalidaDto>> crearLista(@Valid @RequestBody ListaEntradaDto lista) {
     RespuestasDto<ListaSalidaDto> respuesta = _listaService.crearLista(lista);
     return ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
 
-  @Operation(summary = "Listar listas", description = "Devuelve todas las listas, devuelve 200")
+  @Operation(summary = "Listar listas", description = "Requiere autenticación JWT. Devuelve las listas del usuario autenticado (o todas si es ADMIN), devuelve 200")
   @GetMapping()
   public ResponseEntity<RespuestasDto<List<ListaSalidaDto>>> listarListas() {
     RespuestasDto<List<ListaSalidaDto>> respuesta = _listaService.listarListas();
     return ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
 
-  @Operation(summary = "Obtener una lista", description = "Busca una lista por su id, devuelve 200")
+  @Operation(summary = "Obtener una lista", description = "Requiere autenticación JWT. Busca una lista por su id, devuelve 200 (403 si pertenece a otro usuario y no es ADMIN, 404 si no existe)")
   @GetMapping("/{id}")
   public ResponseEntity<RespuestasDto<ListaSalidaDto>> obtenerLista(@PathVariable long id) {
     RespuestasDto<ListaSalidaDto> respuesta = _listaService.obtenerLista(id);
     return ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
 
-  @Operation(summary = "Favoritos de una lista", description = "Devuelve los favoritos que pertenecen a la lista, devuelve 200")
+  @Operation(summary = "Favoritos de una lista", description = "Requiere autenticación JWT. Devuelve los favoritos de la lista si pertenece al usuario autenticado o es ADMIN, devuelve 200 (403 si es ajena)")
   @GetMapping("/{id}/favoritos")
   public ResponseEntity<RespuestasDto<List<FavoritosSalidaDto>>> favoritosDeLista(@PathVariable long id) {
     RespuestasDto<List<FavoritosSalidaDto>> respuesta = _listaService.favoritosDeLista(id);
     return ResponseEntity.status(respuesta.getEstado()).body(respuesta);
   }
 
-  @Operation(summary = "Eliminar una lista vacía", description = "Elimina por id solo si no tiene favoritos, devuelve 204. Si tiene, 409")
+  @Operation(summary = "Eliminar una lista vacía", description = "Requiere autenticación JWT. Elimina por id solo si pertenece al usuario (o ADMIN) y no tiene favoritos, devuelve 204. Si es ajena 403, si tiene favoritos 409")
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> eliminarLista(@PathVariable long id) {
     _listaService.eliminarLista(id);
@@ -68,7 +68,7 @@ public class ListaController {
   }
 
   
-  @Operation(summary = "Mover favoritos", description = "Mueve todos los favoritos de la lista origen a la destino y elimina la origen, devuelve 200")
+  @Operation(summary = "Mover favoritos", description = "Requiere autenticación JWT. Mueve todos los favoritos de la lista origen a la destino (ambas deben pertenecer al usuario o ser ADMIN) y elimina la origen, devuelve 200")
   @PostMapping("/{origenId}/mover-favoritos")
   public ResponseEntity<RespuestasDto<List<FavoritosSalidaDto>>> moverFavoritos(@PathVariable long origenId, @Valid @RequestBody MoverFavoritosDto dto) {
     RespuestasDto<List<FavoritosSalidaDto>> respuesta = _listaService.moverFavoritos(origenId, dto.getDestinoId());
