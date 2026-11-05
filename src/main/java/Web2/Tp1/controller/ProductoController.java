@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import Web2.Tp1.dto.ProductoRespuestaDto;
-import Web2.Tp1.dto.RespuestasDto;
+import Web2.Tp1.dto.ProductoDto.ProductoRespuestaDto;
+import Web2.Tp1.dto.ComunDto.RespuestasDto;
 import Web2.Tp1.service.ProductosService.ProductoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

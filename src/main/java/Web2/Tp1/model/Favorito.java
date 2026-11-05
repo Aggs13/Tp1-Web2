@@ -13,14 +13,8 @@ public class Favorito {
   private int idProducto;
   private String notaPersonal;
   private LocalDate fechaAgregado;
-  
+  private int listaId;
 
-  public  Favorito (int id,int idProducto, String notaPersonal,LocalDate fechaAgregado){
-    this.id = id;
-    this.idProducto = idProducto;
-    this.notaPersonal = notaPersonal;
-    this.fechaAgregado = fechaAgregado;
-
-  }
+  public Favorito() {}
 
 }

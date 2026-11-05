@@ -2,8 +2,8 @@ package Web2.Tp1.service.ProductosService;
 
 import java.util.List;
 
-import Web2.Tp1.dto.ProductoRespuestaDto;
-import Web2.Tp1.dto.RespuestasDto;
+import Web2.Tp1.dto.ProductoDto.ProductoRespuestaDto;
+import Web2.Tp1.dto.ComunDto.RespuestasDto;
 
 public interface ProductoService {
   RespuestasDto<List<ProductoRespuestaDto>> GetProductosService();

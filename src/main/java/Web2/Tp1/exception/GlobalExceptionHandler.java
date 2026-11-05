@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -37,11 +38,42 @@ public class GlobalExceptionHandler {
         return problema;
     }
 
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ProblemDetail handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+
+        String valor = ex.getValue() != null ? ex.getValue().toString() : "null";
+        ProblemDetail problema = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST, "El parámetro '" + ex.getName() + "' con valor '" + valor + "' no es válido");
+        problema.setTitle("Parámetro inválido");
+        return problema;
+    }
+
+    @ExceptionHandler(ConflictoException.class)
+    public ProblemDetail handleConflicto(ConflictoException ex) {
+        ProblemDetail problema = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        problema.setTitle("Conflicto");
+        return problema;
+    }
+
+    @ExceptionHandler(NoAutorizadoException.class)
+    public ProblemDetail handleNoAutorizado(NoAutorizadoException ex) {
+        ProblemDetail problema = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        problema.setTitle("No autorizado");
+        return problema;
+    }
+
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleGenerico(Exception ex) {
         ProblemDetail problema = ProblemDetail.forStatusAndDetail(
         HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error inesperado");
         problema.setTitle("Error interno");
+        return problema;
+    }
+
+    @ExceptionHandler(AccesoDenegadoException.class)
+    public ProblemDetail handleAccesoDenegado(AccesoDenegadoException ex) {
+        ProblemDetail problema = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
+        problema.setTitle("Acceso denegado");
         return problema;
     }
 }
