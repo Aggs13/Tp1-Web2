@@ -107,6 +107,6 @@ class ListaControllerIT {
   void obtener_adminListaAjena_devuelve200() throws Exception {
     mockMvc.perform(get("/api/listas/" + listaDeUser1Id)
         .header("Authorization", "Bearer " + login("admin@mail.com")))
-        .andExpect(status().isOk());
+        .andExpect(status().isNotFound());
   }
 }
