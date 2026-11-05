@@ -2,6 +2,7 @@ package Web2.Tp1;
 
 import java.util.TimeZone;
 
+import org.hibernate.cfg.Environment;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -23,7 +24,8 @@ public class Tp1Application {
 	public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("America/Argentina/Buenos_Aires"));    
 		SpringApplication.run(Tp1Application.class, args);
-		System.out.println("SWAGGER: http://localhost:8081/swagger-ui.html");
+        String swaggerUlr = System.getenv("SWAGGER_URL");
+		System.out.println("SWAGGER:" + swaggerUlr);
 	}
 
 }
